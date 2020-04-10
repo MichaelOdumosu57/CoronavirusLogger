@@ -136,7 +136,7 @@ export class RyberService {
                             ngCss:[
                                 [
                                     {
-                                        
+                                        position:'fixed',
                                         height:'750px',
                                         width:'100%',
                                         'z-index':'1',
@@ -509,10 +509,11 @@ export class RyberService {
                                 ]                    
                             ],                  
                             extras:[
-                                {},
-                                {
-                                    bool:'false'
-                                }                         
+                                [
+                                    {}
+                                ],
+                                [],
+                                []                       
                             ]
                     },                     
                     ...Array.from(Array(1),()=> {
@@ -921,7 +922,8 @@ export class RyberService {
                                         opacity:0,
                                         'font-size':'32px',
                                         top:'439px',
-                                        transition: 'opacity 2s'
+                                        transition: 'opacity 2s',
+                                        position:'fixed'
                                     }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
                                 ],
                                 [
@@ -1058,7 +1060,8 @@ export class RyberService {
                                         ),
                                         display:'none',
                                         opacity:0,
-                                        transition:'opacity .5s '                                       
+                                        transition:'opacity .5s',
+                                        position:'fixed'                                       
                                     },                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
                                 ]                    
                             ],      

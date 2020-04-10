@@ -1,0 +1,12 @@
+console.log(
+    this.ryber[this.panelTV].quantity[1][4].quantity[1],
+    this.ryber[this.panelTV].quantity[1][4].bool[1],
+    this.ryber[this.panelTV].quantity[1][4].val[1],
+    this.ryber[this.panelTV].quantity[1][4].text[1],
+    this.ryber[this.panelTV].quantity[1][4].symbol[1],
+    this.ryber[this.panelTV].quantity[1][4].metadata.mouseover[1],
+    this.ryber[this.panelTV].quantity[1][4].metadata.mouseout[1],
+    this.ryber[this.panelTV].quantity[1][4].metadata.router[1],
+    this.ryber[this.panelTV].quantity[1][4].ngCss[1],
+    this.ryber[this.panelTV].quantity[1][4].ngCssDefault[1]
+) 

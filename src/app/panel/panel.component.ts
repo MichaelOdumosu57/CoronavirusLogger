@@ -4,6 +4,7 @@ import {   fromEvent,interval, of,from, Observable,merge, Subject, combineLatest
 import {   catchError,take,timeout,mapTo, debounceTime,distinctUntilChanged, debounce    } from 'rxjs/operators';
 import {   zChildren,getTextWidth,numberParse,xPosition,resize,componentBootstrap   } from '../customExports'
 
+
 @Component({
     selector: 'app-panel',
     templateUrl: '../template.component.html',
@@ -62,7 +63,7 @@ export class PanelComponent implements OnInit {
                 'MP','OH','OK','OR','PW','PA','PR','RI','SC','SD','TN','TX','UT',
                 'VT','VI','VA','WA','WV','WI','WY'
             ];            
-            let event = new Event('click')
+            
             // navigate from start to symptoms
             this.ryber.panelClickEventSubscription0 = fromEvent([zChild['&#8380'].element,zChild['&#8381'].element],'click').subscribe(()=>{
                 for (let i of ['&#8379','&#8380','&#8381']){
@@ -147,7 +148,6 @@ export class PanelComponent implements OnInit {
                         zChild[x].css['display'] = 'block'   
                         this.ref.detectChanges()                      
                     })
-                    
                     this.ryber.panelClickEventSubscription2 = fromEvent([zChild['&#8392'].element,zChild['&#8378'].element],'click').subscribe(()=>{
                         let state = zChild['&#8384'].element.value.toUpperCase()
                         let citySig = ['&#8385','&#8386','&#8387']
@@ -158,13 +158,12 @@ export class PanelComponent implements OnInit {
                         }
 
 
-                        for( var i of stateAbbrev   ){
+                        for(    var i of stateAbbrev   ){
                             
+                            // from state to city
+                            if(   i === state   ){
 
-                            if(   i == state   ){
-
-
-                                // from state to city 
+ 
                                 selected['state'] = state 
                                 d.forEach((x,i)=>{
                                     zChild[x].css['opacity'] = 0       
@@ -185,8 +184,6 @@ export class PanelComponent implements OnInit {
                                     console.log(city)
                                     selected['city'] = city 
                                     console.log(selected) 
-
-                                    
                                     closing.forEach((x,i)=>{
                                         zChild[x].css['opacity'] = 0     
                                         zChild[x].css['display'] = 'none'   
@@ -196,20 +193,22 @@ export class PanelComponent implements OnInit {
                                         zChild[x].css['opacity'] = 1     
                                         zChild[x].css['display'] = 'block'   
                                         this.ref.detectChanges()                      
-                                    })  
-                                    
-                                                                    
+                                    })                                  
                                 })
-                                //
+                                
 
                                 
                             }
-
+                            //
 
                         }                  
                     })
                     //state input control
-                    let total = []                   
+                    /* 
+                        TEST
+                        make sure that any input option does not crash the application  
+                    */
+                    let total = []                
                     this.ryber.panelInputEventSubscription0 = fromEvent(zChild['&#8384'].element,'input').pipe(
                         debounceTime(300),
                         distinctUntilChanged()
@@ -234,18 +233,7 @@ export class PanelComponent implements OnInit {
                             this.ryber[this.panelTV].quantity[1][4].ngCss[1].pop()  
                             this.ryber[this.panelTV].quantity[1][4].ngCssDefault[1].pop()                    
                         })
-                        console.log(
-                            this.ryber[this.panelTV].quantity[1][4].quantity[1],
-                            this.ryber[this.panelTV].quantity[1][4].bool[1],
-                            this.ryber[this.panelTV].quantity[1][4].val[1],
-                            this.ryber[this.panelTV].quantity[1][4].text[1],
-                            this.ryber[this.panelTV].quantity[1][4].symbol[1],
-                            this.ryber[this.panelTV].quantity[1][4].metadata.mouseover[1],
-                            this.ryber[this.panelTV].quantity[1][4].metadata.mouseout[1],
-                            this.ryber[this.panelTV].quantity[1][4].metadata.router[1],
-                            this.ryber[this.panelTV].quantity[1][4].ngCss[1],
-                            this.ryber[this.panelTV].quantity[1][4].ngCssDefault[1]
-                        )   
+                        //--> state dropdown console log   
                         total = []                        
                         for(let bbb of this.ryber.panelList){   
                             if(   bbb[0][0].match(zChild['&#8384'].element.value.toUpperCase()) !== null  ){
@@ -255,53 +243,95 @@ export class PanelComponent implements OnInit {
                             }
                         }      
                         console.log(total) 
-                        total.forEach((x,i)=>{
-                            this.ryber[this.panelTV].quantity[1][4].quantity[1].push(2)
-                            this.ryber[this.panelTV].quantity[1][4].bool[1].push('a')
-                            this.ryber[this.panelTV].quantity[1][4].val[1].push('p_a_n_e_l_StateOption')
-                            this.ryber[this.panelTV].quantity[1][4].text[1].push(x)
-                            this.ryber[this.panelTV].quantity[1][4].symbol[1].push("&#"+symOpt.next().value)
-                            this.ryber[this.panelTV].quantity[1][4].metadata.mouseover[1].push({fn:null})
-                            this.ryber[this.panelTV].quantity[1][4].metadata.mouseout[1].push({fn:null})
-                            this.ryber[this.panelTV].quantity[1][4].metadata.router[1].push({link:null})
-                            this.ryber[this.panelTV].quantity[1][4].ngCss[1].push({
-                                padding:'12px 16px',
-                                'background-color' :'rgb(255,255,255)',
-                                width:window.getComputedStyle(zChild['&#8384'].element).width,
-                                top:(
-                                    numberParse(window.getComputedStyle(zChild['&#8384'].element).top) +
-                                    numberParse(window.getComputedStyle(zChild['&#8384'].element).height) +
-                                    (
-                                        i * 
-                                        44
-                                    )
-                                ).toString()+'px',
-                                left:(
-                                    numberParse(window.getComputedStyle(zChild['&#8384'].element).left) 
-                                ).toString()+'px',     
-                                'z-index':4,
-                                'border-radius': window.Modernizr.borderradius ? '0px 0px 8px 8px' : null,
-                                border : '1px solid rgb(206, 212, 218)',
-                                'text-decoration':'none',
-                                'text-align':'center'                           
-                            })
-                            this.ryber[this.panelTV].quantity[1][4].ngCssDefault[1].push({})
-                            this.ref.detectChanges()
-                        })
+                        this.ref.detectChanges()
                         
-                        console.log(
-                            this.ryber[this.panelTV].quantity[1][4].quantity[1],
-                            this.ryber[this.panelTV].quantity[1][4].bool[1],
-                            this.ryber[this.panelTV].quantity[1][4].val[1],
-                            this.ryber[this.panelTV].quantity[1][4].text[1],
-                            this.ryber[this.panelTV].quantity[1][4].symbol[1],
-                            this.ryber[this.panelTV].quantity[1][4].metadata.mouseover[1],
-                            this.ryber[this.panelTV].quantity[1][4].metadata.mouseout[1],
-                            this.ryber[this.panelTV].quantity[1][4].metadata.router[1],
-                            this.ryber[this.panelTV].quantity[1][4].ngCss[1],  
-                            this.ryber[this.panelTV].quantity[1][4].ngCssDefault[1]                         
-                        )
-                    })     
+
+                        if(total.length!== 0){
+
+
+                            total.forEach((x,i)=>{
+                                this.ryber[this.panelTV].quantity[1][4].quantity[1].push(2)
+                                this.ryber[this.panelTV].quantity[1][4].bool[1].push('a')
+                                this.ryber[this.panelTV].quantity[1][4].val[1].push('p_a_n_e_l_StateOption')
+                                this.ryber[this.panelTV].quantity[1][4].text[1].push(x)
+                                this.ryber[this.panelTV].quantity[1][4].symbol[1].push("&#"+symOpt.next().value)
+                                this.ryber[this.panelTV].quantity[1][4].metadata.mouseover[1].push({fn:null})
+                                this.ryber[this.panelTV].quantity[1][4].metadata.mouseout[1].push({fn:null})
+                                this.ryber[this.panelTV].quantity[1][4].metadata.router[1].push({link:null})
+                                this.ryber[this.panelTV].quantity[1][4].ngCss[1].push({
+                                    padding:'12px 16px',
+                                    'background-color' :'rgb(255,255,255)',
+                                    width:window.getComputedStyle(zChild['&#8384'].element).width,
+                                    top:(
+                                        numberParse(window.getComputedStyle(zChild['&#8384'].element).top) +
+                                        numberParse(window.getComputedStyle(zChild['&#8384'].element).height) +
+                                        (
+                                            i * 
+                                            40
+                                        )  
+                                    ).toString()+'px',
+                                    left:(
+                                        numberParse(window.getComputedStyle(zChild['&#8384'].element).left) 
+                                    ).toString()+'px',     
+                                    'z-index':4,
+                                    'border-radius': 
+                                    window.Modernizr.borderradius ? 
+                                        (
+                                        total.length -1 === i ?
+                                            '0px 0px 8px 8px' 
+                                            : null
+                                        )
+                                    : null,
+                                    border : '1px solid rgb(206, 212, 218)',
+                                    'text-decoration':'none',
+                                    'text-align':'center'                           
+                                })
+                                this.ryber[this.panelTV].quantity[1][4].ngCssDefault[1].push({})
+                                this.ref.detectChanges()
+                            })
+                            zChild = componentBootstrap({
+                                appElement:{
+                                    element: window.document.querySelector('app-panel[class='+this.panelTV+'],[id^="root"]') as HTMLElement,
+                                    css:this.ryber[this.panelTV].quantity[0][0].ngCss[0][0],
+                                    bool:this.ryber[this.panelTV].quantity[0][0].bool[0][0],
+                                    cssDefault:this.ryber[this.panelTV].quantity[0][0].ngCssDefault[0][0],
+                                    symbol:this.ryber[this.panelTV].quantity[0][0].symbol[0][0]
+                                },
+                                appTV:this.panelTV,
+                                myElements:this.panelMyElements._results,
+                                classes:['p_a_n_e_l_Board','p_a_n_e_l_Title','p_a_n_e_l_ArticleTitle'],
+                                ryber:this.ryber,
+                                zProps:{
+                                    click:'true',
+                                    extras:'true'
+                                }
+                            })          
+                            this.ref.detectChanges()
+                            //--> state dropdown console log 
+
+                        }  
+
+
+                        let last = total.length !== 0 ? "&#"+(symOpt.next().value-1) :"&#8378"
+                        zChild["&#8353"].extras.height = numberParse(window.getComputedStyle(zChild[last].element).top   ) +
+                        numberParse(window.getComputedStyle(zChild[last].element).height) 
+                        console.log(zChild)
+                        zChild["&#8353"].css['height'] = (
+                            zChild["&#8353"].extras.height > 525 ?
+                            zChild["&#8353"].extras.height : 
+                            525
+                        ).toString() + 'px'    
+                        this.ref.detectChanges()
+                    })  
+                    try {
+                        let event0= new Event('input')   
+                        zChild['&#8384'].element.dispatchEvent(event0)  
+                    } 
+                    catch(e){
+                        let eventLegacyInput = window.document.createEvent("Event");
+                        eventLegacyInput.initEvent("input", false, true);       
+                        zChild['&#8384'].element.dispatchEvent(eventLegacyInput)
+                    }             
                     //                                  
                     this.ryber.panelClickEventSubscription1.unsubscribe()             
                 })
@@ -310,11 +340,9 @@ export class PanelComponent implements OnInit {
                 zChild['&#8378'].css['opacity'] = 1
                 this.ref.detectChanges()
                 this.ryber.panelClickEventSubscription0.unsubscribe()
-                let click = new Event('click')
-                zChild['&#8392'].element.dispatchEvent(click)
             })
             //
-            zChild['&#8380'].element.dispatchEvent(event)
+            
             
         }
        
