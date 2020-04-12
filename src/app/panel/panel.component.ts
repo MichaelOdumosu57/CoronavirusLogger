@@ -194,8 +194,8 @@ export class PanelComponent implements OnInit {
                         distinctUntilChanged()
                     )
                     .subscribe(()=>{
-                        console.log(zChild['&#8384'].element.value)
-                        console.log(total)
+                        // console.log(zChild['&#8384'].element.value)
+                        // console.log(total)
                         let symOpt = function *generator() {
                             var index = 8393;
                             while (true)
@@ -222,7 +222,7 @@ export class PanelComponent implements OnInit {
                                 }
                             }
                         }      
-                        console.log(total) 
+                        // console.log(total) 
                         this.ref.detectChanges()
                         
 
@@ -230,17 +230,18 @@ export class PanelComponent implements OnInit {
 
 
                             total.forEach((x,i)=>{
+                                let sym = "&#"+symOpt.next().value
                                 this.ryber[this.panelTV].quantity[1][4].quantity[1].push(2)
                                 this.ryber[this.panelTV].quantity[1][4].bool[1].push('a')
                                 this.ryber[this.panelTV].quantity[1][4].val[1].push('p_a_n_e_l_StateOption')
                                 this.ryber[this.panelTV].quantity[1][4].text[1].push(x)
-                                this.ryber[this.panelTV].quantity[1][4].symbol[1].push("&#"+symOpt.next().value)
+                                this.ryber[this.panelTV].quantity[1][4].symbol[1].push(sym)
                                 this.ryber[this.panelTV].quantity[1][4].metadata.mouseover[1].push({fn:null})
                                 this.ryber[this.panelTV].quantity[1][4].metadata.mouseout[1].push({fn:null})
                                 this.ryber[this.panelTV].quantity[1][4].metadata.click[1].push({
                                     fn:(e:any)=>{
-                                        console.log(e)
                                         e.preventDefault()
+                                        zChild['&#8384'].element.value = zChild[sym].innerText   
                                     }
                                 })
                                 this.ryber[this.panelTV].quantity[1][4].metadata.router[1].push({link:null})
@@ -288,7 +289,7 @@ export class PanelComponent implements OnInit {
                         let last = total.length !== 0 ? "&#"+(symOpt.next().value-1) :"&#8378"
                         zChild["&#8353"].extras.height = numberParse(window.getComputedStyle(zChild[last].element).top   ) +
                         numberParse(window.getComputedStyle(zChild[last].element).height) 
-                        console.log(zChild)
+                        // console.log(zChild)
                         zChild["&#8353"].css['height'] = (
                             zChild["&#8353"].extras.height > 525 ?
                             zChild["&#8353"].extras.height : 
