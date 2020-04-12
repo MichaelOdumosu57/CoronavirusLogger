@@ -37,32 +37,12 @@ export class PanelComponent implements OnInit {
         if(   this.panelTV === 'panelCO0'  ){
                 
     
-            let zChild = componentBootstrap({
-                appElement:{
-                    element: window.document.querySelector('app-panel[class='+this.panelTV+'],[id^="root"]') as HTMLElement,
-                    css:this.ryber[this.panelTV].quantity[0][0].ngCss[0][0],
-                    bool:this.ryber[this.panelTV].quantity[0][0].bool[0][0],
-                    cssDefault:this.ryber[this.panelTV].quantity[0][0].ngCssDefault[0][0],
-                    symbol:this.ryber[this.panelTV].quantity[0][0].symbol[0][0]
-                },
-                appTV:this.panelTV,
-                myElements:this.panelMyElements._results,
-                classes:['p_a_n_e_l_Board','p_a_n_e_l_Title','p_a_n_e_l_ArticleTitle'],
-                ryber:this.ryber,
-                zProps:{
-                    click:'true',
-                    extras:'true'
-                }
+            let zChild = this.newMethod({
+                classes: ['p_a_n_e_l_Board', 'p_a_n_e_l_Title', 'p_a_n_e_l_ArticleTitle']
             })
+            console.log(this.ryber.panelList)
             console.log(zChild)
-            let selected = {}
-            let stateAbbrev = [
-                'AL','AK','AS','AZ','AR','CA','CO','CT','DE','DC','FM','FL','GA',
-                'GU','HI','ID','IL','IN','IA','KS','KY','LA','ME','MH','MD','MA',
-                'MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND',
-                'MP','OH','OK','OR','PW','PA','PR','RI','SC','SD','TN','TX','UT',
-                'VT','VI','VA','WA','WV','WI','WY'
-            ];            
+            let selected = {}           
             
             // navigate from start to symptoms
             this.ryber.panelClickEventSubscription0 = fromEvent([zChild['&#8380'].element,zChild['&#8381'].element],'click').subscribe(()=>{
@@ -158,7 +138,7 @@ export class PanelComponent implements OnInit {
                         }
 
 
-                        for(    var i of stateAbbrev   ){
+                        for(    var i of this.ryber.panelStateAbbrev   ){
                             
                             // from state to city
                             if(   i === state   ){
@@ -257,6 +237,12 @@ export class PanelComponent implements OnInit {
                                 this.ryber[this.panelTV].quantity[1][4].symbol[1].push("&#"+symOpt.next().value)
                                 this.ryber[this.panelTV].quantity[1][4].metadata.mouseover[1].push({fn:null})
                                 this.ryber[this.panelTV].quantity[1][4].metadata.mouseout[1].push({fn:null})
+                                this.ryber[this.panelTV].quantity[1][4].metadata.click[1].push({
+                                    fn:(e:any)=>{
+                                        console.log(e)
+                                        e.preventDefault()
+                                    }
+                                })
                                 this.ryber[this.panelTV].quantity[1][4].metadata.router[1].push({link:null})
                                 this.ryber[this.panelTV].quantity[1][4].ngCss[1].push({
                                     padding:'12px 16px',
@@ -289,25 +275,12 @@ export class PanelComponent implements OnInit {
                                 this.ryber[this.panelTV].quantity[1][4].ngCssDefault[1].push({})
                                 this.ref.detectChanges()
                             })
-                            zChild = componentBootstrap({
-                                appElement:{
-                                    element: window.document.querySelector('app-panel[class='+this.panelTV+'],[id^="root"]') as HTMLElement,
-                                    css:this.ryber[this.panelTV].quantity[0][0].ngCss[0][0],
-                                    bool:this.ryber[this.panelTV].quantity[0][0].bool[0][0],
-                                    cssDefault:this.ryber[this.panelTV].quantity[0][0].ngCssDefault[0][0],
-                                    symbol:this.ryber[this.panelTV].quantity[0][0].symbol[0][0]
-                                },
-                                appTV:this.panelTV,
-                                myElements:this.panelMyElements._results,
-                                classes:['p_a_n_e_l_Board','p_a_n_e_l_Title','p_a_n_e_l_ArticleTitle'],
-                                ryber:this.ryber,
-                                zProps:{
-                                    click:'true',
-                                    extras:'true'
-                                }
-                            })          
+                            zChild = this.newMethod({
+                                classes: ['p_a_n_e_l_Board', 'p_a_n_e_l_Title', 'p_a_n_e_l_ArticleTitle']
+                            }) 
                             this.ref.detectChanges()
                             //--> state dropdown console log 
+
 
                         }  
 
@@ -349,6 +322,26 @@ export class PanelComponent implements OnInit {
     
     }  
     
+    private newMethod(devObj) {
+        return componentBootstrap({
+            appElement: {
+                element: window.document.querySelector('app-panel[class=' + this.panelTV + '],[id^="root"]') as HTMLElement,
+                css: this.ryber[this.panelTV].quantity[0][0].ngCss[0][0],
+                bool: this.ryber[this.panelTV].quantity[0][0].bool[0][0],
+                cssDefault: this.ryber[this.panelTV].quantity[0][0].ngCssDefault[0][0],
+                symbol: this.ryber[this.panelTV].quantity[0][0].symbol[0][0]
+            },
+            appTV: this.panelTV,
+            myElements: this.panelMyElements._results,
+            classes:devObj.classes,
+            ryber: this.ryber,
+            zProps: {
+                click: 'true',
+                extras: 'true'
+            }
+        });
+    }
+
     ngOnDestroy(): void {
         console.log(this.panelTV+ '  ngOnDestroy fires on dismount')
     }      

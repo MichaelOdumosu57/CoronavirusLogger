@@ -38,8 +38,9 @@
         <ng-template #elseBlock7  > 
             <a #myVal *ngIf= "a.bool[1][bb] ==='a' else elseBlock8" class = {{a.val[1][bb]}} 
             [ngStyle] = 'a.ngCss[1][bb]' href ={{a.metadata.router[1][bb].link}}  
-            (mouseover)="ryber.appEventListener(a.metadata.mouseover[1][bb].fn)"
-            (mouseout)="ryber.appEventListener(a.metadata.mouseout[1][bb].fn)"
+            (mouseover)="ryber.appEventListener(a.metadata.mouseover[1][bb].fn,$event)"
+            (mouseout)="ryber.appEventListener(a.metadata.mouseout[1][bb].fn,$event)"
+            (click)="ryber.appEventListener(a.metadata.click[1][bb].fn,$event)"
             >{{a.text[1][bb]}}</a>            
         </ng-template> 
         <ng-template #elseBlock8  > 
