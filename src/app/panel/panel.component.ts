@@ -37,12 +37,12 @@ export class PanelComponent implements OnInit {
         if(   this.panelTV === 'panelCO0'  ){
                 
     
-            let zChild = this.newMethod({
+            let zChild = this.zChildInit({
                 classes: ['p_a_n_e_l_Board', 'p_a_n_e_l_Title', 'p_a_n_e_l_ArticleTitle']
             })
-            console.log(this.ryber.panelList)
             console.log(zChild)
-            let selected = {}           
+            let selected = {}    
+                  
             
             // navigate from start to symptoms
             this.ryber.panelClickEventSubscription0 = fromEvent([zChild['&#8380'].element,zChild['&#8381'].element],'click').subscribe(()=>{
@@ -90,7 +90,13 @@ export class PanelComponent implements OnInit {
                 })
                 zChild['&#8392'].css['opacity'] = 1
                 // from symptoms to state
-                this.ryber.panelClickEventSubscription1 = fromEvent([zChild['&#8392'].element,zChild['&#8378'].element],'click').subscribe(()=>{
+                this.ryber.panelClickEventSubscription1 = combineLatest(
+                    fromEvent([zChild['&#8392'].element,zChild['&#8378'].element],'click'),
+                    this.ryber.panelListGet
+                ).pipe(
+                    debounceTime(2000)
+                ).subscribe(()=>{
+                    window.dgasdgasg = selected  
                     let d = ['&#8382','&#8383','&#8384']
                     c.forEach((x,i)=>{
                         this.ryber[x].unsubscribe()
@@ -276,7 +282,7 @@ export class PanelComponent implements OnInit {
                                 this.ryber[this.panelTV].quantity[1][4].ngCssDefault[1].push({})
                                 this.ref.detectChanges()
                             })
-                            zChild = this.newMethod({
+                            zChild = this.zChildInit({
                                 classes: ['p_a_n_e_l_Board', 'p_a_n_e_l_Title', 'p_a_n_e_l_ArticleTitle']
                             }) 
                             this.ref.detectChanges()
@@ -323,7 +329,12 @@ export class PanelComponent implements OnInit {
     
     }  
     
-    private newMethod(devObj) {
+
+    ngOnDestroy(): void {
+        console.log(this.panelTV+ '  ngOnDestroy fires on dismount')
+    }
+    
+    private zChildInit(devObj): any {
         return componentBootstrap({
             appElement: {
                 element: window.document.querySelector('app-panel[class=' + this.panelTV + '],[id^="root"]') as HTMLElement,
@@ -341,9 +352,7 @@ export class PanelComponent implements OnInit {
                 extras: 'true'
             }
         });
-    }
+    }    
 
-    ngOnDestroy(): void {
-        console.log(this.panelTV+ '  ngOnDestroy fires on dismount')
-    }      
+    
 }

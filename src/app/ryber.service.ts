@@ -184,10 +184,12 @@ export class RyberService {
         // panelComponent concept metadata 
         panelList:Array<any>
         panelStateAbbrev:Array<any>
-        panelListGet:Subscription = this.http.post<any>("http://localhost:3001/env/",'testing123')
+        panelListGet:Observable<any> = this.http.post<any>("http://localhost:3001/env/",'testing123')
         .pipe(
             tap((a:any)=> {
                 console.log('http success!')
+                this.panelList = a.panelList
+                this.panelStateAbbrev = a.abbrev                
                 return a
             }),  // return the string instead
             catchError(
@@ -204,12 +206,8 @@ export class RyberService {
                 // Let the app keep running by returning an empty result.
                 return of([]);
                 }
-            })('getStates', [])),
-        ).subscribe((a:any)=>{
-            console.log(a)
-            this.panelList = a.panelList
-            this.panelStateAbbrev = a.abbrev
-        })
+            })('getStates', []))
+        )
          
         //
 
@@ -608,7 +606,7 @@ export class RyberService {
                                     "Runny Nose",
                                     "Sore Throat",
                                     "Diarrhea",
-                                    "Difficulty Breathing ",
+                                    "Difficulty Breathing",
                                     "Gradual Symptoms",
                                     "Next"
                                 ],

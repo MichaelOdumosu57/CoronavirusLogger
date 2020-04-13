@@ -5,7 +5,8 @@ import {   fromEvent,Subject,Observable,of,Subscription,interval   } from 'rxjs'
 import {   catchError,take,timeout   } from 'rxjs/operators'
 
 declare global {
-    interface Window { Modernizr: any; }
+    interface Window { Modernizr: any;
+        dgasdgasg:any  }
 }
 
 window.Modernizr = window.Modernizr || {}
