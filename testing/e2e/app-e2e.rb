@@ -177,13 +177,40 @@ module TestMod
           end
         end 
         if my_symptoms.length != j  then 
-          p %{failed at length  }
+          p %{failed at length}
           fail
         end
 
-      end    
-                                
+      end                        
     end
+
+    RSpec.feature "state dropdown" do
+      scenario %{chose a letter,
+      only the first matching letter of the state match} do
+        visit '/'
+        elem = first ".p_a_n_e_l_ButtonText" 
+        elem.select_option
+        options = all %{.p_a_n_e_l_Option}
+        10.times do |r; i|
+          i = rand(options.length)
+          options[i].select_option
+        end         
+        button = first %{.p_a_n_e_l_NextButton} 
+        button.select_option   
+        sleep 5         
+        input = first %{.p_a_n_e_l_Input}
+        ('a'...'w').each do |letter|
+          
+          input.send_keys :backspace, letter
+          sleep 5
+          state_options = all %{.p_a_n_e_l_StateOption}
+          state_options.each do |state|
+            expect(state.text[0]).to match letter.upcase 
+          end
+          sleep 5           
+        end   
+      end        
+    end     
 
 
 
