@@ -8,6 +8,7 @@ require 'rspec/expectations'
 require 'rails_helper'
 require 'percy'
 require 'selenium/webdriver'
+load 'custom_exports.rb'
 
 
 
@@ -22,7 +23,6 @@ module TestMod
   include Capybara
   include Capybara::DSL
   include Capybara::Selenium
-  Capybara.app_host = 'http://localhost:4200'
   # monkey patch to avoid reset sessions
   class Capybara::Selenium::Driver < Capybara::Driver::Base
     def reset!
@@ -77,10 +77,11 @@ module TestMod
   # Capybara.default_driver = :chrome 
   # Capybara.javascript_driver = :chrome 
   # Capybara.current_driver = :chrome
-  Capybara.app_host = 'http://localhost:4200'
+  Capybara.app_host = 'https://watermine.firebaseapp.com'
+  # Capybara.app_host = "https://www.sortforyou.com"
+  # Capybara.app_host = "https://localhost:4200"
   puts Capybara::Selenium
 
-  # Capybara.app_host = "https://www.sortforyou.com"
 
   # Capybara.configure do |config|
   #   config.default_max_wait_time = 20
@@ -88,6 +89,8 @@ module TestMod
   
   def TestMod.startTest  
     @javascript
+    helper_mod = CustomExports.new
+
     RSpec.feature "navigation stuff" do
       scenario "Click on start button" do
         visit '/'
@@ -187,29 +190,94 @@ module TestMod
     RSpec.feature "state dropdown" do
       scenario %{chose a letter,
       only the first matching letter of the state match} do
-        visit '/'
-        elem = first ".p_a_n_e_l_ButtonText" 
+        visit %{/}
+        elem = first %{.p_a_n_e_l_ButtonText} 
         elem.select_option
         options = all %{.p_a_n_e_l_Option}
         10.times do |r; i|
-          i = rand(options.length)
+          i = rand options.length
           options[i].select_option
         end         
         button = first %{.p_a_n_e_l_NextButton} 
         button.select_option   
         sleep 5         
         input = first %{.p_a_n_e_l_Input}
-        ('a'...'w').each do |letter|
-          
-          input.send_keys :backspace, letter
+        state_options = nil 
+        prc = lambda do |ltr|
+          input.send_keys :backspace
+          input.send_keys ltr if ltr != nil
           sleep 5
           state_options = all %{.p_a_n_e_l_StateOption}
+        end 
+        ('a'..'w').each do |letter|
+          prc.call letter
           state_options.each do |state|
             expect(state.text[0]).to match letter.upcase 
           end
           sleep 5           
-        end   
+        end  
+        prc.call nil
+        sleep 5
+        p state_options.length
+        expect(state_options.length).to eq 50          
+      end  
+      
+      scenario %{dropdrown option click appears in input} do
+        visit %{/}
+        elem = first %{.p_a_n_e_l_ButtonText} 
+        elem.select_option
+        options = all %{.p_a_n_e_l_Option}
+        2.times do |r; i|
+          i = rand options.length
+          options[i].select_option
+        end         
+        button = first %{.p_a_n_e_l_NextButton} 
+        button.select_option   
+        sleep 5         
+        input = first %{.p_a_n_e_l_Input}
+        sleep 5
+        state_options = all %{.p_a_n_e_l_StateOption}
+        20.times do |i|
+          clicked_dropdown = state_options[rand state_options.length].select_option
+          expect(clicked_dropdown.text).to match input.value
+          sleep 1
+        end        
+      end  
+
+      scenario %{panel should stretch with the options} do
+        visit %{/}
+        elem = first %{.p_a_n_e_l_ButtonText} 
+        elem.select_option
+        options = all %{.p_a_n_e_l_Option}
+        1.times do |r; i|
+          i = rand options.length
+          options[i].select_option
+        end         
+        button = first %{.p_a_n_e_l_NextButton} 
+        button.select_option   
+        sleep 5         
+        input = first %{.p_a_n_e_l_Input}
+        sleep 5
+        state_options = Hash.new  
+        state_options[:last_element] = all %{.p_a_n_e_l_StateOption}
+        state_options[:last_element] = state_options[:last_element].last 
+        state_options[:css] = state_options[:last_element].style %{top},%{height}
+        state_options[:text] = state_options[:last_element].text
+        state_options[:amnt] = 0
+        panel_Board =Hash.new 
+        panel_Board[:element] = first %{.p_a_n_e_l_Board}
+        panel_Board[:css] =  panel_Board[:element].style %{top},%{height}
+        panel_Board[:amnt] = 0
+        prc = lambda do |a|
+          a[:css].each do |k,v|
+            a[:amnt] = a[:amnt] + helper_mod.number_parse(v)
+          end
+        end
+        prc.call panel_Board
+        prc.call state_options
+        expect(panel_Board[:amnt]-30).to be > state_options[:amnt]
       end        
+
     end     
 
 

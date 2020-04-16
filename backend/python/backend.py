@@ -32,33 +32,37 @@ config  = {
     'storageBucket': lb['storage_bucket']
 }
 
-pyre_firebase = pyrebase.initialize_app(config)
-pyre_auth = pyre_firebase.auth()
-pyre_db = pyre_firebase.database()
-pyre_storage = pyre_firebase.storage()
+try:
+
+    pyre_firebase = pyrebase.initialize_app(config)
+    pyre_auth = pyre_firebase.auth()
+    pyre_db = pyre_firebase.database()
+    pyre_storage = pyre_firebase.storage()
 
 ##############################################################################   
 
 #firebase setup
 
-cred = credentials.Certificate(lb)
-options = {
-    'serviceAccountId': lb['client_email'],
-    'databaseURL':lb['database_url'],
-    'storageBucket': lb['storage_bucket']
-}
-app = firebase_admin.initialize_app(cred,options)
+    cred = credentials.Certificate(lb)
+    options = {
+        'serviceAccountId': lb['client_email'],
+        'databaseURL':lb['database_url'],
+        'storageBucket': lb['storage_bucket']
+    }
+    app = firebase_admin.initialize_app(cred,options)
 
 
 ##############################################################################   
 
 #database code 
-ref = db.reference('/')
-states_ref = ref.child('states')
+    ref = db.reference('/')
+    states_ref = ref.child('states')
 
 
 ##############################################################################   
-
+except BaseException:
+    None
+    
 #web server
 class my_base_handler(http.server.BaseHTTPRequestHandler):
     server_version = 'Apache/2.0'

@@ -4,7 +4,7 @@ import { Observable, of, Subject, Subscription } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { zChildren, componentObject,numberParse } from './customExports';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
+import {states } from '../../reserve/statesCititesBackup'
 
 
 @Injectable({
@@ -203,8 +203,10 @@ export class RyberService {
                 // console.log(`${operation} failed: ${error.message}`);
                 console.log('could not retrieve states')
             
-                // Let the app keep running by returning an empty result.
-                return of([]);
+                // Let the app keep running by returning the states 
+                this.panelList = states.panelList
+                this.panelStateAbbrev = states.abbrev  
+                return of(states);
                 }
             })('getStates', []))
         )
