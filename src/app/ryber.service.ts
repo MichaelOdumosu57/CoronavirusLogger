@@ -261,8 +261,10 @@ export class RyberService {
         // PanelComponent Instances
         panelMyElements :Subject<Array<any[]>> = new Subject<Array<any>>();
         panelMyElementsArray: any[] = [];        
-        panelCO0:componentObject ={ //'&#8393'
+        panelCO0:componentObject ={ 
             metadata:{
+                symbolLeftOff: 8394,
+                symbolStart:8352
             },
             generator:(function(){
                 return function *generator() {
@@ -918,14 +920,23 @@ export class RyberService {
                     ...Array.from(Array(1),()=> {
                         return {
                             signature:'state',
-                            quantity:[[],Array.from(Array(3),()=> { return 3}),[]],
-                            bool:[[],[...Array.from(Array(2),()=> { return 'h1'}), ...Array.from(Array(1),()=> { return 'i'})],[]], 
+                            quantity:[
+                                [],
+                                Array.from(Array(4),()=> { return 3}),
+                                []
+                            ],
+                            bool:[
+                                [],
+                                ['h1','h1','i','h2'],
+                                []
+                            ], 
                             val:[
                                 [],
                                 [
                                     'p_a_n_e_l_Title',
-                                    ...Array.from(Array(1),()=> { return 'p_a_n_e_l_LocationTitle'}), 
-                                    ...Array.from(Array(1),()=> { return 'p_a_n_e_l_Input'})                           
+                                    'p_a_n_e_l_LocationTitle', 
+                                    'p_a_n_e_l_Input',
+                                    'p_a_n_e_l_Warning'                           
                                 ],
                                 [
                                     // ...Array.from(Array(2),()=> { return 'p_a_n_e_l_Cross'}),
@@ -938,12 +949,13 @@ export class RyberService {
                                     "Location",
                                     "State",
                                     "",
+                                    "Invalid State   Please Try Again"
                                 ],
                                 []
                             ],
                             symbol:[
                                 [],
-                                ['&#8382','&#8383','&#8384']
+                                ['&#8382','&#8383','&#8384','&#8393']
                             ],                            
                             metadata:{
                                 mouseover:[
@@ -954,42 +966,27 @@ export class RyberService {
                                             }
                                         }),                                        
                                     ],
-                                    [
-                                        ...Array.from(Array(2),()=> { return {
-                                                fn:null,    
-                                            }
-                                        }),                                                                                                                           
-                                    ]
+                                    []
                                 ],
                                 mouseout:[
                                     [],
                                     [
-                                        ...Array.from(Array(3),()=> { return {
+                                        ...Array.from(Array(4),()=> { return {
                                             fn:null,    
                                             }
                                         }),                                         
                                     ],
-                                    [
-                                        ...Array.from(Array(2),()=> { return {
-                                            fn:null,    
-                                        }
-                                    }),                                                                                                                           
-                                    ]
+                                    []
                                 ],
                                 click:[
                                     [],
                                     [
-                                        ...Array.from(Array(3),()=> { return {
+                                        ...Array.from(Array(4),()=> { return {
                                             fn:null,    
                                             }
                                         }),                                         
                                     ],
-                                    [
-                                        ...Array.from(Array(2),()=> { return {
-                                            fn:null,    
-                                        }
-                                    }),                                                                                                                           
-                                    ]
+                                    []
                                 ],                                
                                 video:[
                                     [],
@@ -999,7 +996,7 @@ export class RyberService {
                                 placeholder:[
                                     [],
                                     [   
-                                        ...Array.from(Array(2),()=> { 
+                                        ...Array.from(Array(4),()=> { 
                                             return ''
                                         }),                                        
                                     ],
@@ -1010,14 +1007,15 @@ export class RyberService {
                                     [   
                                         '',
                                         '',
-                                       'text'                                     
+                                       'text',
+                                       ''                                     
                                     ],
                                     []
                                 ],                                
                                 attrMinlength:[
                                     [],
                                     [   
-                                        ...Array.from(Array(3),()=> { 
+                                        ...Array.from(Array(4),()=> { 
                                             return 2
                                         }),                                        
                                     ],
@@ -1026,7 +1024,7 @@ export class RyberService {
                                 attrMaxlength:[
                                     [],
                                     [   
-                                        ...Array.from(Array(3),()=> { 
+                                        ...Array.from(Array(4),()=> { 
                                             return 2
                                         }),                                        
                                     ],
@@ -1035,7 +1033,7 @@ export class RyberService {
                                 router:[
                                     [],
                                     [
-                                        ...Array.from(Array(3),()=> { 
+                                        ...Array.from(Array(4),()=> { 
                                             return {
                                                 link:null
                                             }
@@ -1049,7 +1047,7 @@ export class RyberService {
                                 [
                                     {
                                         
-                                        'z-index':'2',
+                                        'z-index':'1',
                                         'font-family':'Open Sans',
                                         'left':'490.5px',
                                         top:'130px',
@@ -1058,7 +1056,7 @@ export class RyberService {
                                     },
                                     {
                                         
-                                        'z-index':'2',
+                                        'z-index':'1',
                                         'font-family':'Open Sans',
                                         'left':'535px',
                                         top:'210px',
@@ -1066,7 +1064,7 @@ export class RyberService {
                                         transition:'opacity 1s'
                                     },
                                     {
-                                        'z-index':'2',
+                                        'z-index':'1',
                                         'font-family':'Open Sans',
                                         'left':'503px',
                                         'background-color': (
@@ -1080,7 +1078,18 @@ export class RyberService {
                                         opacity:0,
                                         transition:'opacity 1s',
                                         display:'none'
-                                    },                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+                                    },    
+                                    {
+                                        position:'fixed',
+                                        'z-index':'1',
+                                        'font-family':'Open Sans',
+                                        'left':'740px',
+                                        color:'red',
+                                        top:'335px',
+                                        width:'200px',
+                                        'text-align':'center',
+                                        opacity:0
+                                    },                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
                                 ],
                                 []                 
                             ],      

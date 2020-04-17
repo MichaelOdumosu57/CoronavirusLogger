@@ -56,6 +56,7 @@ export class PanelComponent implements OnInit {
                 let c = []
                 a.forEach((x,i)=>{
                     zChild[x].css['opacity'] = 1 
+                    zChild[x].css['z-index'] = 3 
                     this.ryber["panelClickEventSubscription" + (i+4)] = fromEvent(zChild[x].element, 'click').subscribe(()=>{
 
                         
@@ -97,7 +98,7 @@ export class PanelComponent implements OnInit {
                     debounceTime(2000)
                 ).subscribe(()=>{
                     window.dgasdgasg = selected  
-                    let d = ['&#8382','&#8383','&#8384']
+                    let d = ['&#8382','&#8383','&#8384','&#8393']
                     c.forEach((x,i)=>{
                         this.ryber[x].unsubscribe()
                     })
@@ -114,6 +115,7 @@ export class PanelComponent implements OnInit {
 
 
                         zChild[x].css['opacity'] = 0 
+                        zChild[x].css['z-index'] = zChild[x].cssDefault['z-index'] 
                         this.ref.detectChanges()
                         zChild[x].css['display'] = 'none' 
 
@@ -130,7 +132,10 @@ export class PanelComponent implements OnInit {
                         
                     })
                     d.forEach((x,i)=>{
-                        zChild[x].css['opacity'] = 1       
+
+                        
+                        if(x !== '&#8393') { zChild[x].css['opacity'] = 1  }
+                        zChild[x].css['z-index'] = 2       
                         zChild[x].css['display'] = 'block'   
                         this.ref.detectChanges()                      
                     })
@@ -140,7 +145,13 @@ export class PanelComponent implements OnInit {
 
 
                         if(   state.length !== 2  ){
+
+                            
+                            zChild['&#8393'].css['opacity'] = 1
+                            this.ref.detectChanges()
                             return 
+
+
                         }
 
 
@@ -150,9 +161,10 @@ export class PanelComponent implements OnInit {
                             if(   i === state   ){
 
  
-                                selected['state'] = state 
+                                selected['state'] = i
                                 d.forEach((x,i)=>{
-                                    zChild[x].css['opacity'] = 0       
+                                    zChild[x].css['opacity'] = 0  
+                                    zChild[x].css['z-index'] = 1       
                                     this.ref.detectChanges()   
                                     zChild[x].css['display'] = 'none'                      
                                 })  
@@ -164,7 +176,7 @@ export class PanelComponent implements OnInit {
                                 this.ryber.panelClickEventSubscription2.unsubscribe() 
                                 this.ryber.panelInputEventSubscription0.unsubscribe() 
                                 this.ryber.panelClickEventSubscription3 = fromEvent([zChild['&#8392'].element,zChild['&#8378'].element],'click').subscribe(()=>{
-                                    let  city = zChild['&#8387'].element.value.toUpperCase()
+                                    let city = zChild['&#8387'].element.value.toUpperCase()
                                     let farewellSig = ['&#8388','&#8389','&#8390']
                                     let closing = [...citySig,'&#8392','&#8378']
                                     console.log(city)
@@ -187,7 +199,17 @@ export class PanelComponent implements OnInit {
                             }
                             //
 
-                        }                  
+                        }    
+                        
+
+                        if(   selected['state'] === undefined   ){
+
+
+                            zChild['&#8393'].css['opacity'] = 1
+                            this.ref.detectChanges()
+                            
+                            
+                        }                                      
                     })
                     //state input control
                     /* 
@@ -202,11 +224,11 @@ export class PanelComponent implements OnInit {
                     .subscribe(()=>{
                         // console.log(zChild['&#8384'].element.value)
                         // console.log(total)
-                        let symOpt = function *generator() {
-                            var index = 8393;
+                        let symOpt = function *generator(a) {
+                            var index = a
                             while (true)
                             yield index++;
-                        }()                         
+                        }(this.ryber[this.panelTV].metadata.symbolLeftOff)                         
                         total.forEach((x,i)=>{
                             this.ryber[this.panelTV].quantity[1][4].quantity[1].pop() 
                             this.ryber[this.panelTV].quantity[1][4].bool[1].pop()
@@ -286,6 +308,7 @@ export class PanelComponent implements OnInit {
                                 classes: ['p_a_n_e_l_Board', 'p_a_n_e_l_Title', 'p_a_n_e_l_ArticleTitle']
                             }) 
                             this.ref.detectChanges()
+                            // console.log(zChild)
                             //--> state dropdown console log 
 
 

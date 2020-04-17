@@ -126,7 +126,7 @@ module TestMod
         prc.call panel_Board
         prc.call state_options
         expect(panel_Board[:amnt]-30).to be > state_options[:amnt]
-      end   
+      end  
 
     end     
 
