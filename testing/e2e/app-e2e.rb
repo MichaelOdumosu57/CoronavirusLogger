@@ -1,13 +1,12 @@
 require 'capybara'
 require 'capybara/dsl'
-# require 'capybara/selenium'
-# require 'capybara/angular'
 require 'capybara/rspec'
 require 'capybara/rspec/matcher_proxies'
 require 'rspec/expectations'
 require 'rails_helper'
 require 'percy'
 require 'selenium/webdriver'
+require 'selenium-webdriver'
 load 'custom_exports.rb'
 
 
@@ -23,6 +22,8 @@ module TestMod
   include Capybara
   include Capybara::DSL
   include Capybara::Selenium
+  include Selenium
+
   # monkey patch to avoid reset sessions
   class Capybara::Selenium::Driver < Capybara::Driver::Base
     def reset!
@@ -66,25 +67,50 @@ module TestMod
     # :url => "https://#{config[:user]}:#{config[:key]}@hub.lambdatest.com/wd/hub",
     # :desired_capabilities => caps)
   end
-  puts b
-  
+  # puts b
 
+
+
+  c = Capybara.register_driver :internetExplorer do |app|
+    
+    # p Capybara::Selenium::Driver::InternetExplorerDriver.options
+    caps = {        
+      :ignore_zoom_level => %{true},
+      :ignore_zoom_setting => %{true},   
+      :ignore_zoom_level => true,
+      :ignore_zoom_setting => true,
+      :ignore_protected_mode_settings => true       
+    }
+    Capybara::Selenium::Driver.new(
+      app,
+      :browser => :internet_explorer,
+      :options =>  caps
+    )
+    
+    
+    
+  end  
+  
+  p c.class
+  p :internet_explorer
  
 
   # Capybara.default_driver = :lambdatest 
   Capybara.run_server = false  
-  Capybara.default_driver = :selenium 
+  Capybara.default_driver = :internetExplorer
   # Capybara.default_driver = :chrome 
   # Capybara.javascript_driver = :chrome 
   # Capybara.current_driver = :chrome
   # Capybara.app_host = "https://www.sortforyou.com"
   # Capybara.app_host = "https://localhost:4200"
-  puts Capybara::Selenium
+  # puts Capybara::Selenium
+ 
 
 
-  # Capybara.configure do |config|
-  #   config.default_max_wait_time = 20
-  # end
+  Capybara.configure do |config|
+    # config.default_max_wait_time = 20
+    # Capybara.current_session.driver.browser.manage.window.resize_to 100, 100
+  end
   
   def TestMod.startTest  
     @javascript
@@ -100,6 +126,7 @@ module TestMod
         scenario "Click on start button" do
           visit '/'
           elem = first ".p_a_n_e_l_ButtonText" 
+          p elem 
           elem.select_option        
           expect(page).to have_selector '.p_a_n_e_l_Option';
         end 
@@ -285,7 +312,7 @@ module TestMod
 
       end    
     end  
-
+   
     
     # RSpec.feature "visual regression debugging" do
     #   scenario "take a snapshot of the projects page", :js => true do
@@ -299,6 +326,7 @@ module TestMod
     #   end
     # end
 
+
  
 
     
@@ -308,6 +336,7 @@ module TestMod
 
 end
 TestMod.startTest
+system %{taskkill /IM "iexplore.exe" /F}
 
 
 
