@@ -1,5 +1,9 @@
 require 'capybara'
+require 'capybara/dsl'
 require 'selenium-webdriver'
+require 'capybara/rspec'
+require 'capybara/rspec/matcher_proxies'
+require 'rspec/expectations'
 
 # Done for demo purposes here!
 Capybara.app_host = %{http://localhost:4200}
@@ -10,8 +14,7 @@ Capybara.register_driver :remote_chrome do |app|
     :options => Selenium::WebDriver::IE::Options.new({
       :ignore_zoom_levels => true,
       :ignore_zoom_setting => true, 
-      :javascript_enabled => true,
-      :ignore_protected_mode_settings =>true
+      :javascript_enabled => true
     }),
   })
   p a 
