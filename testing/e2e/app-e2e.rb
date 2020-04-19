@@ -33,6 +33,9 @@ module TestMod
     end
   end
   
+  # Selenium::WebDriver.logger.level = :debug
+  # Selenium::WebDriver.logger.output = 'selenium.log'
+
   config = Hash.new 
   config[:user] = ENV['LT_USERNAME']  
   config[:key] = ENV['LT_APIKEY'] 
@@ -81,7 +84,7 @@ module TestMod
         # :browser_attach_timeout => 1,
         :javascript_enabled => true,
         :persistent_hover => true,
-        :require_window_focus => true,
+        # :require_window_focus => true,
         :ignore_protected_mode_settings =>true,
       })
     )
@@ -89,7 +92,7 @@ module TestMod
     
     
   end  
-
+# C:\Ruby26-x64\bin\MicrosoftWebDrivers.exe --jwp  
   Capybara.register_driver :firefox do |app|
     
     # p Capybara::Selenium::Driver::InternetExplorerDriver.options
@@ -103,29 +106,46 @@ module TestMod
     
   end   
   
+  Capybara.register_driver :edgeBrowser do |app|
+    
+    # p Capybara::Selenium::Driver::InternetExplorerDriver.options
+
+    
+
+    Capybara::Selenium::Driver.new(
+      app,
+      :browser => :edge,
+      :desired_capabilities =>Selenium::WebDriver::Remote::Capabilities::edge({
+        :javascript_enabled => true,
+        :css_selectors_enabled => true,
+      }),
+    )
+    
+    
+    
+  end    
 
  
+  
+
+  
 
   # Capybara.default_driver = :lambdatest 
   Capybara.run_server = false  
-  # Capybara.default_driver = :internetExplorer
-  # Capybara.default_driver = :chrome 
-  # Capybara.javascript_driver = :chrome 
-  # Capybara.current_driver = :chrome
-  # Capybara.app_host = "https://www.sortforyou.com"
-  # Capybara.app_host = "https://localhost:4200"
-  # puts Capybara::Selenium
+
  
 
 
   Capybara.configure do |config|
-    # config.default_max_wait_time = 20
+  # config.default_max_wait_time = 20
     # config.w3c_click_offset = true
     # Capybara.current_session.driver.browser.manage.window.resize_to 100, 100
   end
 
   RSpec.configure do |config|
-    my_drivers = %i{ selenium internetExplorer  }
+    my_drivers = %i{   selenium internetExplorer edgeBrowser  selenium_chrome    }
+    # my_drivers = %i{  edgeBrowser  }
+    # my_drivers = %i{ opera }
     hosts = Hash.new 
     hosts[:prod] =  %{https://watermine.firebaseapp.com}
     hosts[:dev] =  %{http://localhost:4200}
@@ -140,6 +160,11 @@ module TestMod
         end    
       end  
     end  
+    config.after :suite do
+      # system %{taskkill /IM MicrosoftEdge.exe}
+      system %{taskkill /IM MicrosoftEdge.exe -F}
+      system %{taskkill /IM MicrosoftWebDrivers.exe}
+    end    
   end
   
   def TestMod.startTest  
@@ -147,7 +172,7 @@ module TestMod
     helper_mod = CustomExports.new
     # need hosts[:tests] so you dont make the ryberService and the componentObject.ts avail in production 
     
-
+    
     RSpec.feature %{navigation stuff} do        
       scenario "Click on start button" do
         visit '/'
