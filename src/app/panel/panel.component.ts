@@ -187,7 +187,11 @@ export class PanelComponent implements OnInit {
                                     zChild[x].css['display'] = 'block'   
                                     this.ref.detectChanges()                      
                                 })    
-                                console.log(zChild,total)                                                           
+                                zChild = this.zChildInit({
+                                    classes: ['p_a_n_e_l_Board', 'p_a_n_e_l_Title', 'p_a_n_e_l_ArticleTitle']
+                                })                    
+                                total = []              
+                                console.log(zChild,total)                                                                                          
                                 this.ryber.panelClickEventSubscription2.unsubscribe() 
                                 this.ryber.panelInputEventSubscription0.unsubscribe() 
                                 this.ryber.panelClickEventSubscription3 = fromEvent([zChild['&#8392'].element,zChild['&#8378'].element],'click').subscribe(()=>{
@@ -222,95 +226,20 @@ export class PanelComponent implements OnInit {
                                     }(this.ryber[this.panelTV].metadata.symbolLeftOff) 
                                     console.log(this.ryber[this.panelTV].quantity[1][5])
                                     total = []  
-                                    let {signature,extras,metadata,...rests} = this.ryber[this.panelTV].quantity[1][5]
-                                    Object.values(rests).forEach((x,i)=>{
-                                        console.log(x)
+                                    let {signature,extras,metadata,...rests} = this.ryber[this.panelTV].quantity[1][5]                                    
+                                    let {video,...neededMetadata} = metadata
+                                    console.log(selected['cityOptions'])
+                                    console.log(rests)
+                                    console.log(total)
+                                    //this is working
+                                    Object.values({...rests,...neededMetadata}).forEach((x,i)=>{
                                         x[1].splice(x[1].length-total.length,x[1].length)
-                                    })                              
-                                    console.log(metadata)      
-                                                         
-                                    for(let bbb of selected['cityOptions']){   
-                                        if(   bbb.toUpperCase().match(zChild['&#8387'].element.value.toUpperCase()) !== null  ){
-                                            if(   bbb.toUpperCase().match(zChild['&#8387'].element.value.toUpperCase()).index === 0  ){
-                                                total.push(bbb)
-                                            }
-                                        }
-                                    }       
-                                    this.ref.detectChanges() 
-                                    console.log(this.ryber[this.panelTV].quantity[1][5])
-                                    
-
-                                    if(total.length!== 0){
-
-
-                                        total.forEach((x,i)=>{
-                                            let sym = "&#"+symOpt.next().value
-                                            this.ryber[this.panelTV].quantity[1][5].quantity[1].push(2)
-                                            this.ryber[this.panelTV].quantity[1][5].bool[1].push('a')
-                                            this.ryber[this.panelTV].quantity[1][5].val[1].push('p_a_n_e_l_CityOption')
-                                            this.ryber[this.panelTV].quantity[1][5].text[1].push(x)
-                                            this.ryber[this.panelTV].quantity[1][5].symbol[1].push(sym)
-                                            this.ryber[this.panelTV].quantity[1][5].metadata.mouseover[1].push({fn:null})
-                                            this.ryber[this.panelTV].quantity[1][5].metadata.mouseout[1].push({fn:null})
-                                            this.ryber[this.panelTV].quantity[1][5].metadata.click[1].push({
-                                                fn:(e:any)=>{
-                                                    e.preventDefault()
-                                                    zChild['&#8387'].element.value = zChild[sym].innerText   
-                                                }
-                                            })
-                                            this.ryber[this.panelTV].quantity[1][5].metadata.router[1].push({link:null})
-                                            this.ryber[this.panelTV].quantity[1][5].ngCss[1].push({
-                                                padding:'12px 16px',
-                                                'background-color' :'rgb(255,255,255)',
-                                                width:window.getComputedStyle(zChild['&#8387'].element).width,
-                                                top:(
-                                                    numberParse(window.getComputedStyle(zChild['&#8387'].element).top) +
-                                                    numberParse(window.getComputedStyle(zChild['&#8387'].element).height) +
-                                                    (
-                                                        i * 
-                                                        40
-                                                    )  
-                                                ).toString()+'px',
-                                                left:(
-                                                    numberParse(window.getComputedStyle(zChild['&#8387'].element).left) 
-                                                ).toString()+'px',     
-                                                'z-index':4,
-                                                'border-radius': 
-                                                window.Modernizr.borderradius ? 
-                                                    (
-                                                    total.length -1 === i ?
-                                                        '0px 0px 8px 8px' 
-                                                        : null
-                                                    )
-                                                : null,
-                                                border : '1px solid rgb(206, 212, 218)',
-                                                'text-decoration':'none',
-                                                'text-align':'center'                           
-                                            })
-                                            this.ryber[this.panelTV].quantity[1][5].ngCssDefault[1].push({})
-                                            this.ref.detectChanges()
-                                        })
-                                        zChild = this.zChildInit({
-                                            classes: ['p_a_n_e_l_Board', 'p_a_n_e_l_Title', 'p_a_n_e_l_ArticleTitle']
-                                        }) 
-                                        this.ref.detectChanges()
-                                        // console.log(zChild)
-                                        //--> state dropdown console log 
-            
-            
-                                    }  
-            
-            
-                                    let last = total.length !== 0 ? "&#"+(symOpt.next().value-1) :"&#8378"
-                                    zChild["&#8353"].extras.height = numberParse(window.getComputedStyle(zChild[last].element).top   ) +
-                                    numberParse(window.getComputedStyle(zChild[last].element).height) 
-                                    // console.log(zChild)
-                                    zChild["&#8353"].css['height'] = (
-                                        zChild["&#8353"].extras.height > 525 ?
-                                        zChild["&#8353"].extras.height : 
-                                        525
-                                    ).toString() + 'px'    
-                                    this.ref.detectChanges()                                    
+                                    })            
+                                    Object.values(neededMetadata).forEach((x,i)=>{
+                                        x[1].splice(x[1].length-total.length,x[1].length)
+                                    })      
+                                    //                                                  
+                                    console.log(this.ryber[this.panelTV].quantity[1][5])                    
                                 })                                
                                 
                                 
@@ -356,7 +285,7 @@ export class PanelComponent implements OnInit {
                         this.ryber[this.panelTV].quantity[1][4].metadata.router[1].splice(this.ryber[this.panelTV].quantity[1][4].metadata.router[1].length - total.length, this.ryber[this.panelTV].quantity[1][4].metadata.router[1].length ) 
                         this.ryber[this.panelTV].quantity[1][4].ngCss[1].splice(this.ryber[this.panelTV].quantity[1][4].ngCss[1].length - total.length, this.ryber[this.panelTV].quantity[1][4].ngCss[1].length )  
                         this.ryber[this.panelTV].quantity[1][4].ngCssDefault[1].splice(this.ryber[this.panelTV].quantity[1][4].ngCssDefault[1].length - total.length, this.ryber[this.panelTV].quantity[1][4].ngCssDefault[1].length ) 
-                        this.ryber[this.panelTV].quantity[1][4].metadata.click[1].splice(this.ryber[this.panelTV].quantity[1][4].metadata.click[1].length - total.length,this.ryber[this.panelTV].quantity[1][4].metadata.click[1].length)
+                        // this.ryber[this.panelTV].quantity[1][4].metadata.click[1].splice(this.ryber[this.panelTV].quantity[1][4].metadata.click[1].length - total.length,this.ryber[this.panelTV].quantity[1][4].metadata.click[1].length)
                         //--> state dropdown console log   
                         total = []                        
                         for(let bbb of this.ryber.panelList){   

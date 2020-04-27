@@ -963,7 +963,7 @@ export class RyberService {
                                 mouseover:[
                                     [],
                                     [
-                                        ...Array.from(Array(3),()=> { return {
+                                        ...Array.from(Array(4),()=> { return {
                                             fn:null,    
                                             }
                                         }),                                        
@@ -1096,18 +1096,32 @@ export class RyberService {
                                 []                 
                             ],      
                             extras:[
-                                {},
-                                {
-                                    bool:'false'
-                                }                         
+                                [],
+                                [
+                                    ...Array.from(Array(4),()=> { return {
+                                            chosen:'false',    
+                                        }
+                                    }),                                    
+                                ],
+                                []                        
                             ]
                     }}), 
                     ...Array.from(Array(1),()=> {
                         return {
                             signature:'city',
-                            quantity:[[],Array.from(Array(3),()=> { return 3}),Array.from(Array(0),()=> { return 3})],
-                            bool:[[],[...Array.from(Array(2),()=> { return 'h1'}), ...Array.from(Array(1),()=> { return 'i'})],
-                            [...Array.from(Array(13),()=> { return 'div'}) ]], 
+                            quantity:[
+                                [],
+                                Array.from(Array(3),()=> { return 3}),
+                                Array.from(Array(0),()=> { return 3})
+                            ],
+                            bool:[
+                                [],
+                                [   
+                                    ...Array.from(Array(2),()=> { return 'h1'}),
+                                    ...Array.from(Array(1),()=> { return 'i'})
+                                ],
+                                []
+                            ], 
                             val:[
                                 [],
                                 [
@@ -1115,53 +1129,52 @@ export class RyberService {
                                     ...Array.from(Array(1),()=> { return 'p_a_n_e_l_LocationTitle'}), 
                                     ...Array.from(Array(1),()=> { return 'p_a_n_e_l_Input'})                           
                                 ],
-                                [
-                                    // ...Array.from(Array(2),()=> { return 'p_a_n_e_l_Cross'}),
-                                    // ...Array.from(Array(11),()=> { return 'p_a_n_e_l_CircleOption'})                                               
-                                ]
+                                []
                             ], 
                             text:[
                                 [],
                                 [
                                     "Location",
                                     "City",
+                                    ""
                                 ],
                                 []
                             ],
                             symbol:[
                                 [],
-                                ['&#8385','&#8386','&#8387']
+                                ['&#8385','&#8386','&#8387'],
+                                []
                             ],                            
                             metadata:{
                                 mouseover:[
                                     [],
-                                    [],
                                     [
-                                        ...Array.from(Array(2),()=> { return {
+                                        ...Array.from(Array(3),()=> { return {
                                                 fn:null,    
                                             }
-                                        }),                                                                                                                           
-                                    ]
+                                        }),
+                                    ],
+                                    []
                                 ],
                                 mouseout:[
                                     [],
-                                    [],
                                     [
-                                        ...Array.from(Array(2),()=> { return {
-                                            fn:null,    
-                                        }
-                                    }),                                                                                                                           
-                                    ]
+                                        ...Array.from(Array(3),()=> { return {
+                                                fn:null,    
+                                            }
+                                        }),
+                                    ],
+                                    []
                                 ],
                                 click:[
                                     [],
-                                    [],
                                     [
-                                        ...Array.from(Array(2),()=> { return {
-                                            fn:null,    
-                                        }
-                                    }),                                                                                                                           
-                                    ]
+                                        ...Array.from(Array(3),()=> { return {
+                                                fn:null,    
+                                            }
+                                        }),
+                                    ],
+                                    []
                                 ],                                
                                 video:[
                                     [],
@@ -1171,7 +1184,7 @@ export class RyberService {
                                 placeholder:[
                                     [],
                                     [   
-                                        ...Array.from(Array(2),()=> { 
+                                        ...Array.from(Array(3),()=> { 
                                             return ''
                                         }),                                        
                                     ],
@@ -1207,7 +1220,7 @@ export class RyberService {
                                 router:[
                                     [],
                                     [
-                                        ...Array.from(Array(4),()=> { 
+                                        ...Array.from(Array(3),()=> { 
                                             return {
                                                 link:null
                                             }
@@ -1257,10 +1270,14 @@ export class RyberService {
                                 []                 
                             ],      
                             extras:[
-                                {},
-                                {
-                                    bool:'false'
-                                }                         
+                                [],
+                                [
+                                    ...Array.from(Array(3),()=> { return {
+                                            chosen:'false',    
+                                        }
+                                    }),                                    
+                                ],
+                                []                         
                             ]
                     }}),   
                     ...Array.from(Array(1),()=> {
