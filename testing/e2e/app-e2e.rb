@@ -33,8 +33,8 @@ module TestMod
     end
   end
   
-  # Selenium::WebDriver.logger.level = :debug
-  # Selenium::WebDriver.logger.output = 'selenium.log'
+  Selenium::WebDriver.logger.level = :debug
+  Selenium::WebDriver.logger.output = 'selenium.log'
 
   config = Hash.new 
   config[:user] = ENV['LT_USERNAME']  
@@ -92,19 +92,7 @@ module TestMod
     
     
   end  
-# C:\Ruby26-x64\bin\MicrosoftWebDrivers.exe --jwp  
-  Capybara.register_driver :firefox do |app|
-    
-    # p Capybara::Selenium::Driver::InternetExplorerDriver.options
-
-    Capybara::Selenium::Driver.new(
-      app,
-      :browser => :selenium,
-    )
-    
-    
-    
-  end   
+  
   
   Capybara.register_driver :edgeBrowser do |app|
     
@@ -125,15 +113,14 @@ module TestMod
     
   end    
 
- 
-  
-
+  # Capybara.register_driver :selenium_edge do |app|
+  #   Capybara::Selenium::Driver.load_selenium
+  #   Capybara::Selenium::Driver.new(app, browser: :edge, options: {args:%w{%{--jwp}}}  )
+  # end  
   
 
   # Capybara.default_driver = :lambdatest 
   Capybara.run_server = false  
-
- 
 
 
   Capybara.configure do |config|
@@ -143,11 +130,14 @@ module TestMod
   end
 
   RSpec.configure do |config|
-    my_drivers = %i{   selenium internetExplorer edgeBrowser  selenium_chrome    }
+    # my_drivers = %i{   selenium internetExplorer edgeBrowser  selenium_chrome    }
+    my_drivers = %i{   selenium internetExplorer edgeBrowser      }
     # my_drivers = %i{  edgeBrowser  }
+    # my_drivers = %i{  selenium_edge  }
     # my_drivers = %i{ opera }
+    # my_drivers = %i{ selenium }
     hosts = Hash.new 
-    hosts[:prod] =  %{https://watermine.firebaseapp.com}
+    # hosts[:prod] =  %{https://watermine.firebaseapp.com}
     hosts[:dev] =  %{http://localhost:4200}
     config.around do |example|
       p example 
@@ -361,7 +351,96 @@ module TestMod
         prc.call state_options
         expect(panel_Board[:amnt]-30).to be > state_options[:amnt]
       end        
+      scenario %{if a user enters an invalid state option
+      prompt them until they get it right} do
+        visit %{/}
+        elem = first %{.p_a_n_e_l_ButtonText} 
+        elem.select_option
+        options = all %{.p_a_n_e_l_Option}
+        6.times do |r; i|
+          i = rand options.length
+          options[i].select_option
+        end         
+        button = first %{.p_a_n_e_l_NextButton} 
+        button.select_option   
+        sleep 5         
+        Capybara.ignore_hidden_elements = false 
+        input = first %{.p_a_n_e_l_Input}
+        warning = Hash.new
+        warning[:element] = first %{.p_a_n_e_l_Warning}
+        sleep 5
+        /on no keys/
+        button.select_option
+        sleep 3
+        warning[:style] = warning[:element].style %{opacity}
+        expect(warning[:style][%{opacity}]).to match %{1}
+        /on one key/
+        visit %{/}
+        elem = first %{.p_a_n_e_l_ButtonText} 
+        elem.select_option
+        options = all %{.p_a_n_e_l_Option}
+        6.times do |r; i|
+          i = rand options.length
+          options[i].select_option
+        end         
+        button = first %{.p_a_n_e_l_NextButton} 
+        button.select_option   
+        sleep 5  
+        input = first %{.p_a_n_e_l_Input}
+        warning = Hash.new
+        warning[:element] = first %{.p_a_n_e_l_Warning}        
+        input.send_keys %{O}      
+        button.select_option
+        sleep 3
+        warning[:style] = warning[:element].style %{opacity}
+        expect(warning[:style][%{opacity}]).to match %{1}
+        /on 2 wrong keys/
+        visit %{/}
+        elem = first %{.p_a_n_e_l_ButtonText} 
+        elem.select_option
+        options = all %{.p_a_n_e_l_Option}
+        6.times do |r; i|
+          i = rand options.length
+          options[i].select_option
+        end         
+        button = first %{.p_a_n_e_l_NextButton} 
+        button.select_option   
+        sleep 5  
+        input = first %{.p_a_n_e_l_Input}
+        warning = Hash.new
+        warning[:element] = first %{.p_a_n_e_l_Warning}        
+        input.send_keys %{JN}      
+        button.select_option
+        sleep 3
+        warning[:style] = warning[:element].style %{opacity}
+        expect(warning[:style][%{opacity}]).to match %{1} 
+        input.send_keys :backspace,:backspace ,%{AR} 
+        button.select_option    
+        sleep 3
+        warning[:style] = warning[:element].style %{opacity}
+        expect(warning[:style][%{opacity}]).to match %{0}            
+        Capybara.ignore_hidden_elements = true
+      end    
+      
+      scenario %{once the state option is selected, 
+      the state list should disappear as the city option moves in } do
+        visit %{/}
+        elem = first %{.p_a_n_e_l_ButtonText} 
+        elem.select_option
+        options = all %{.p_a_n_e_l_Option}        
+        button = first %{.p_a_n_e_l_NextButton} 
+        button.select_option   
+        sleep 5         
+        Capybara.ignore_hidden_elements = false 
+        input = first %{.p_a_n_e_l_Input}
+        sleep 5  
+        input.send_keys %{NJ}
+        stateOpt = all %{.p_a_n_e_l_StateOption}  
+        button.select_option
+        sleep 3
+        expect(page).not_to have_selector %{.p_a_n_e_l_StateOption}
 
+      end        
     end    
 
     

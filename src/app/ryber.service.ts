@@ -252,7 +252,8 @@ export class RyberService {
         panelClickEventSubscription20:Subscription
         panelClickEventSubscription21:Subscription  
         panelInputEvent$:Observable<Event> 
-        panelInputEventSubscription0:Subscription       
+        panelInputEventSubscription0:Subscription 
+        panelInputEventSubscription1:Subscription       
         // 
 
 
@@ -955,7 +956,8 @@ export class RyberService {
                             ],
                             symbol:[
                                 [],
-                                ['&#8382','&#8383','&#8384','&#8393']
+                                ['&#8382','&#8383','&#8384','&#8393'],
+                                []
                             ],                            
                             metadata:{
                                 mouseover:[
@@ -1151,6 +1153,16 @@ export class RyberService {
                                     }),                                                                                                                           
                                     ]
                                 ],
+                                click:[
+                                    [],
+                                    [],
+                                    [
+                                        ...Array.from(Array(2),()=> { return {
+                                            fn:null,    
+                                        }
+                                    }),                                                                                                                           
+                                    ]
+                                ],                                
                                 video:[
                                     [],
                                     [],
@@ -1191,7 +1203,18 @@ export class RyberService {
                                         }),                                        
                                     ],
                                     []
-                                ]                                                                  
+                                ],
+                                router:[
+                                    [],
+                                    [
+                                        ...Array.from(Array(4),()=> { 
+                                            return {
+                                                link:null
+                                            }
+                                        }),                                          
+                                    ],
+                                    []
+                                ]                                                                   
                             },
                             ngCss:[
                                 [],

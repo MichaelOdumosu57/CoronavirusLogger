@@ -1,15 +1,13 @@
 require 'capybara'
 require 'capybara/dsl'
-# require 'capybara/selenium'
-# require 'capybara/angular'
 require 'capybara/rspec'
 require 'capybara/rspec/matcher_proxies'
 require 'rspec/expectations'
 require 'rails_helper'
 require 'percy'
 require 'selenium/webdriver'
+require 'selenium-webdriver'
 load 'custom_exports.rb'
-
 
 
 
@@ -21,9 +19,11 @@ load 'custom_exports.rb'
 
 module TestMod
 
-  include Capybara
+  # include Capybara
   include Capybara::DSL
-  include Capybara::Selenium
+  # include Capybara::Selenium
+  include Selenium
+
   # monkey patch to avoid reset sessions
   class Capybara::Selenium::Driver < Capybara::Driver::Base
     def reset!
@@ -33,13 +33,16 @@ module TestMod
     end
   end
   
+  # Selenium::WebDriver.logger.level = :debug
+  # Selenium::WebDriver.logger.output = 'selenium.log'
+
   config = Hash.new 
   config[:user] = ENV['LT_USERNAME']  
   config[:key] = ENV['LT_APIKEY'] 
   
   
    
-  b = Capybara.register_driver :lambdatest do |app|
+  Capybara.register_driver :lambdatest do |app|
     # p app
     caps = {                       
       :browserName => "chrome",         
@@ -56,10 +59,10 @@ module TestMod
     } 
   
     a =Capybara::Selenium::Driver.new(
-    app,
-    :browser => :remote,
-    :url => "https://#{config[:user]}:#{config[:key]}@hub.lambdatest.com/wd/hub",
-    :desired_capabilities => caps
+      app,
+      :browser => :remote,
+      :url => "https://#{config[:user]}:#{config[:key]}@hub.lambdatest.com/wd/hub",
+      :desired_capabilities => caps
     )
     # puts a.class
     # puts a.options
@@ -67,90 +70,114 @@ module TestMod
     # :url => "https://#{config[:user]}:#{config[:key]}@hub.lambdatest.com/wd/hub",
     # :desired_capabilities => caps)
   end
-  puts b
+
+  Capybara.register_driver :internetExplorer do |app|
+    
+    # p Capybara::Selenium::Driver::InternetExplorerDriver.options
+
+    Capybara::Selenium::Driver.new(
+      app,
+      :browser => :internet_explorer,
+      :options =>   Selenium::WebDriver::IE::Options.new({
+        :ignore_zoom_levels => true,
+        :ignore_zoom_setting => true,
+        # :browser_attach_timeout => 1,
+        :javascript_enabled => true,
+        :persistent_hover => true,
+        # :require_window_focus => true,
+        :ignore_protected_mode_settings =>true,
+      })
+    )
+    
+    
+    
+  end    
+
   
+  Capybara.register_driver :edgeBrowser do |app|
+    
+    # p Capybara::Selenium::Driver::InternetExplorerDriver.options
 
- 
+    
 
-  # Capybara.default_driver = :lambdatest 
+    Capybara::Selenium::Driver.new(
+      app,
+      :browser => :edge,
+      :desired_capabilities =>Selenium::WebDriver::Remote::Capabilities::edge({
+        :javascript_enabled => true,
+        :css_selectors_enabled => true,
+      }),
+    )
+    
+    
+    
+  end    
+
   Capybara.run_server = false  
-  Capybara.default_driver = :selenium 
-  # Capybara.default_driver = :chrome 
-  # Capybara.javascript_driver = :chrome 
-  # Capybara.current_driver = :chrome
-  Capybara.app_host = 'https://watermine.firebaseapp.com'
-  # Capybara.app_host = "https://www.sortforyou.com"
-  # Capybara.app_host = "https://localhost:4200"
-  puts Capybara::Selenium
 
 
-  # Capybara.configure do |config|
-  #   config.default_max_wait_time = 20
-  # end
+  Capybara.configure do |config|
+  # config.default_max_wait_time = 20
+    # config.w3c_click_offset = true
+    # Capybara.current_session.driver.browser.manage.window.resize_to 100, 100
+  end
+
+  RSpec.configure do |config|
+    # my_drivers = %i{   selenium internetExplorer edgeBrowser selenium_chrome     }
+    # my_drivers = %i{   selenium internetExplorer edgeBrowser      }
+    # my_drivers = %i{  edgeBrowser  }
+    # my_drivers = %i{ opera }
+    my_drivers = %i{ selenium }
+    hosts = Hash.new 
+    # hosts[:prod] =  %{https://watermine.firebaseapp.com}
+    hosts[:dev] =  %{http://localhost:4200}
+    config.around do |example|
+      p example 
+      my_drivers.each do |browser|
+        hosts.each do |k,v|
+          Capybara.current_driver = browser
+          Capybara.app_host = v
+          p Capybara.app_host.to_s +  %{  in } + Capybara.current_driver.to_s           
+          example.run
+        end    
+      end  
+    end  
+    config.after :suite do
+      # system %{taskkill /IM MicrosoftEdge.exe}
+      system %{taskkill /IM MicrosoftEdge.exe -F}
+      system %{taskkill /IM MicrosoftWebDrivers.exe}
+    end    
+  end
   
   def TestMod.startTest  
     @javascript
     helper_mod = CustomExports.new
+    # need hosts[:tests] so you dont make the ryberService and the componentObject.ts avail in production 
+    
+  
+    RSpec.feature %{state dropdown} do
 
-    RSpec.feature "current " do
-
-      scenario %{panel should stretch with the options} do
+      scenario %{once the state option is selected, 
+      the state list should disappear as the city option moves in } do
         visit %{/}
         elem = first %{.p_a_n_e_l_ButtonText} 
         elem.select_option
-        options = all %{.p_a_n_e_l_Option}
-        1.times do |r; i|
-          i = rand options.length
-          options[i].select_option
-        end         
+        options = all %{.p_a_n_e_l_Option}        
         button = first %{.p_a_n_e_l_NextButton} 
         button.select_option   
         sleep 5         
+        Capybara.ignore_hidden_elements = false 
         input = first %{.p_a_n_e_l_Input}
-        sleep 5
-        state_options = Hash.new  
-        state_options[:last_element] = all %{.p_a_n_e_l_StateOption}
-        state_options[:last_element] = state_options[:last_element].last 
-        state_options[:css] = state_options[:last_element].style %{top},%{height}
-        state_options[:text] = state_options[:last_element].text
-        state_options[:amnt] = 0
-        panel_Board =Hash.new 
-        panel_Board[:element] = first %{.p_a_n_e_l_Board}
-        panel_Board[:css] =  panel_Board[:element].style %{top},%{height}
-        panel_Board[:amnt] = 0
-        prc = lambda do |a|
-          a[:css].each do |k,v|
-            a[:amnt] = a[:amnt] + helper_mod.number_parse(v)
-          end
-        end
-        prc.call panel_Board
-        prc.call state_options
-        expect(panel_Board[:amnt]-30).to be > state_options[:amnt]
-      end  
+        sleep 5  
+        input.send_keys %{NJ}
+        stateOpt = all %{.p_a_n_e_l_StateOption}  
+        button.select_option
+        sleep 3
+        expect(page).not_to have_selector %{.p_a_n_e_l_StateOption}
 
-    end     
-
-
-
-    # RSpec.feature "visual regression debugging" do
-    #   scenario "take a snapshot of the projects page", :js => true do
-    #     visit '/'
-    #     elem = first "#n_a_v_i_g_a_t_i_o_n_blogLink" 
-    #     elem.select_option
-    #     # Percy.snapshot page, { :name => 'windsor projects page', :widths=> [668, 1187, 1800] }
-    #     page.current_window.resize_to 668, 800
-    #     sleep 30       
-    #     Percy.snapshot page, { :name => 'windsor projects page phone', :widths => [668] }
-    #   end
-    # end
-
- 
-
-    
-
+      end           
+    end    
   end
-
-
 end
 TestMod.startTest
 
