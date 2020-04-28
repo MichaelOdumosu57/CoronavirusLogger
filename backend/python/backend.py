@@ -61,8 +61,9 @@ try:
 
 
 ##############################################################################   
-except BaseException:
-    None
+except Exception as e:
+    print(e )
+    
     
 #web server
 class my_base_handler(http.server.BaseHTTPRequestHandler):

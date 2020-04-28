@@ -1236,7 +1236,7 @@ export class RyberService {
                                         
                                         'z-index':'2',
                                         'font-family':'Open Sans',
-                                        'left':'490.5px',
+                                        'left':'531px',
                                         top:'130px',
                                         opacity:0,
                                         transition:'opacity 1s',                                        
@@ -1245,7 +1245,7 @@ export class RyberService {
                                         
                                         'z-index':'2',
                                         'font-family':'Open Sans',
-                                        'left':'535px',
+                                        'left':'565px',
                                         top:'210px',
                                         opacity:0,
                                         transition:'opacity 1s',                                        
@@ -1253,12 +1253,12 @@ export class RyberService {
                                     {
                                         'z-index':'2',
                                         'font-family':'Open Sans',
-                                        'left':'495px',
+                                        'left':'530px',
                                         'background-color': (
                                             window.Modernizr.rgba ? 'rgba(0,0,0,.1)' : 'grey'
                                         ),
                                         'height':'30px',
-                                        width:'140px',
+                                        width:'150px',
                                         top:'290px',
                                         'font-size':'30px',
                                         'text-align':'center',

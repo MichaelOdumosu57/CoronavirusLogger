@@ -33,8 +33,8 @@ module TestMod
     end
   end
   
-  Selenium::WebDriver.logger.level = :debug
-  Selenium::WebDriver.logger.output = 'selenium.log'
+  # Selenium::WebDriver.logger.level = :debug
+  # Selenium::WebDriver.logger.output = 'selenium.log'
 
   config = Hash.new 
   config[:user] = ENV['LT_USERNAME']  
@@ -132,7 +132,7 @@ module TestMod
   RSpec.configure do |config|
     # my_drivers = %i{   selenium internetExplorer edgeBrowser  selenium_chrome    }
     my_drivers = %i{   selenium internetExplorer edgeBrowser      }
-    # my_drivers = %i{  edgeBrowser  }
+    # my_drivers = %i{  edgeBrowser selenium }
     # my_drivers = %i{  selenium_edge  }
     # my_drivers = %i{ opera }
     # my_drivers = %i{ selenium }
@@ -164,13 +164,13 @@ module TestMod
     
     
     RSpec.feature %{navigation stuff} do        
-      scenario "Click on start button" do
+      scenario %{Click on start button} do
         visit '/'
         elem = first ".p_a_n_e_l_ButtonText" 
         elem.select_option        
         expect(page).to have_selector '.p_a_n_e_l_Option';
       end  
-      scenario "Options should toggle" do
+      scenario %{Options should toggle} do
         visit '/'
         elem = first ".p_a_n_e_l_ButtonText" 
         elem.select_option        
@@ -195,7 +195,7 @@ module TestMod
         Capybara.ignore_hidden_elements = true
         reset_session!
       end         
-      scenario "Options should be counted in selection" do
+      scenario %{Options should be counted in selection} do
         visit '/'
         elem = first ".p_a_n_e_l_ButtonText" 
         elem.select_option        
@@ -443,6 +443,110 @@ module TestMod
       end        
     end    
 
+    RSpec.feature %{city dropdown} do
+
+      scenario %{the city input it should be greater than 140px } do
+        visit %{/}
+        elem = first %{.p_a_n_e_l_ButtonText} 
+        elem.select_option
+        options = all %{.p_a_n_e_l_Option}        
+        button = first %{.p_a_n_e_l_NextButton} 
+        button.select_option   
+        sleep 5         
+        Capybara.ignore_hidden_elements = false 
+        input = first %{.p_a_n_e_l_Input}
+        sleep 5  
+        input.send_keys %{AR}
+        stateOpt = all %{.p_a_n_e_l_StateOption}  
+        button.select_option
+        sleep 3
+        input = Hash.new 
+        input[:element] = all %{.p_a_n_e_l_Input}
+        input[:width] = input[:element].at(1).style %{width}
+        expect(input[:width][%{width}].slice!(0..2).to_i).to be > 140
+      end
+      scenario %{ and if a city text size is in the input it will expand the input element } do
+        visit %{/}
+        elem = first %{.p_a_n_e_l_ButtonText} 
+        elem.select_option
+        options = all %{.p_a_n_e_l_Option}        
+        button = first %{.p_a_n_e_l_NextButton} 
+        button.select_option   
+        sleep 5         
+        Capybara.ignore_hidden_elements = false 
+        input = first %{.p_a_n_e_l_Input}
+        sleep 5  
+        input.send_keys %{AR}
+        stateOpt = all %{.p_a_n_e_l_StateOption}  
+        button.select_option
+        sleep 3
+        input = Hash.new 
+        input[:element] = all %{.p_a_n_e_l_Input}
+        input[:element].at(1).send_keys %{BETHEL HEIGHTS}
+        sleep 2
+        input[:width] = input[:element].at(1).style %{width}
+        input[:font_family]  = input[:element].at(1).style %{font-family}
+        input[:font_size]  = input[:element].at(1).style %{font-size}
+        p input[:width]
+        input[:text_width] = Hash.new 
+        input[:text_width][:font]   = input[:font_size][%{font-size}] +" "+input[:font_family][%{font-family}]
+        input[:text_width][:elementText] = input[:element].at(1).text
+        input[:text_width][:canvas] = evaluate_script  %Q{
+          (()=>{
+            canvas = document.createElement('canvas') 
+            ctx = canvas.getContext("2d")
+            ctx.font = window.getComputedStyle(document.querySelectorAll('.p_a_n_e_l_Input')[1])["font-size"] + 
+            " "+
+            window.getComputedStyle(document.querySelectorAll('.p_a_n_e_l_Input')[1])["font-family"] 
+            return ctx.measureText(document.querySelectorAll('.p_a_n_e_l_Input')[1].value).width;             
+          })()         
+        }
+        p input[:text_width][:canvas]   
+        expect( helper_mod.number_parse(input[:width][%{width}])  ).to be > input[:text_width][:canvas].to_i 
+      end
+      scenario %{ and if a city text size is option selected it will expand the input} do
+        visit %{/}
+        elem = first %{.p_a_n_e_l_ButtonText} 
+        elem.select_option
+        options = all %{.p_a_n_e_l_Option}        
+        button = first %{.p_a_n_e_l_NextButton} 
+        button.select_option   
+        sleep 5         
+        Capybara.ignore_hidden_elements = false 
+        input = first %{.p_a_n_e_l_Input}
+        sleep 5  
+        input.send_keys %{AR}
+        stateOpt = all %{.p_a_n_e_l_StateOption}  
+        button.select_option
+        sleep 3
+        input = Hash.new 
+        input[:element] = all %{.p_a_n_e_l_Input}
+        input[:element].at(1).send_keys %{BE}
+        city_options = all %{.p_a_n_e_l_CityOption}
+        city_options.at(5).select_option
+        sleep 2
+        input[:width] = input[:element].at(1).style %{width}
+        input[:font_family]  = input[:element].at(1).style %{font-family}
+        input[:font_size]  = input[:element].at(1).style %{font-size}
+        p input[:width]
+        input[:text_width] = Hash.new 
+        input[:text_width][:font]   = input[:font_size][%{font-size}] +" "+input[:font_family][%{font-family}]
+        input[:text_width][:elementText] = input[:element].at(1).text
+        input[:text_width][:canvas] = evaluate_script  %Q{
+          (()=>{
+            canvas = document.createElement('canvas') 
+            ctx = canvas.getContext("2d")
+            ctx.font = window.getComputedStyle(document.querySelectorAll('.p_a_n_e_l_Input')[1])["font-size"] + 
+            " "+
+            window.getComputedStyle(document.querySelectorAll('.p_a_n_e_l_Input')[1])["font-family"] 
+            return ctx.measureText(document.querySelectorAll('.p_a_n_e_l_Input')[1].value).width;             
+          })()         
+        }
+        p input[:text_width][:canvas]   
+        expect( helper_mod.number_parse(input[:width][%{width}])  ).to be > input[:text_width][:canvas].to_i 
+      end         
+
+    end       
     
     # RSpec.feature "visual regression debugging" do
     #   scenario "take a snapshot of the projects page", :js => true do

@@ -278,6 +278,18 @@ export function getTextWidth(   devObj:{elementText:string,font:string}   ){
     return ctx.measureText(devObj.elementText).width;
 }
 
+export function eventDispatcher(   devObj:{event:string,element:HTMLElement}   ){
+    try {
+        let event0= new Event(devObj.event)   
+        devObj.element.dispatchEvent(event0)  
+    } 
+    catch(e){
+        let eventLegacy = window.document.createEvent("Event");
+        eventLegacy.initEvent(devObj.event, false, true);       
+        devObj.element.dispatchEvent(eventLegacy)
+    }  
+}
+
 export function numberParse(   dimension:any   ){
     dimension = parseFloat(dimension.split("p")[0])
     return dimension;
@@ -328,8 +340,8 @@ export function resize(   devObj:any   ){
 
     }
     return result = result > devObj.default  ? 
-        devObj.default.toString() + "px"      :
-        result.toString() + "px"     
+        devObj.default :
+        result      
 }
 
 
@@ -356,7 +368,7 @@ export function xPosition(devObj){
     return (    
         (   devObj.contain*devObj.containPos   ) -  
         (   devObj.target*devObj.targetPos   )   
-    ).toString() + "px"; 
+    ) ; 
 }
 
 
