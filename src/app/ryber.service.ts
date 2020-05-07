@@ -457,8 +457,8 @@ export class RyberService {
                                 [],
                                 [],
                                 [
-                                    ...Array.from(Array(0),()=> { return 
-                                        {}
+                                    ...Array.from(Array(0),()=> { 
+                                        return {}
                                     }),  
                                 ]                      
                             ]
@@ -575,8 +575,8 @@ export class RyberService {
                                 [],
                                 [],
                                 [
-                                    ...Array.from(Array(0),()=> { return 
-                                        {}
+                                    ...Array.from(Array(0),()=> {  
+                                        return {}
                                     }),  
                                 ]                      
                             ]

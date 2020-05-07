@@ -272,7 +272,7 @@ export class PanelComponent implements OnInit {
                                     let paddingy = 12 
                                     let paddingx = 16
                                     let heightDiff = numberParse(window.getComputedStyle(zChild['&#8387'].element).width) - 
-                                    (paddingx *2) -.25                                    
+                                    (paddingx *2) -1.27                             
 
 
                                     if(total.length!== 0){
@@ -313,12 +313,47 @@ export class PanelComponent implements OnInit {
                                                         (()=>{
                                                             let finalVal = heightVal 
                                                             let  extender = x.split(/ |-/).length != 1  ?
-                                                             Math.ceil(
-                                                                getTextWidth({
-                                                                    elementText:x,
-                                                                    font: '16px Times New Roman' // default font for a alinks
-                                                                })/heightDiff 
-                                                            ) : 1
+                                                             (()=>{
+                                                                 let multiFinal = 1
+                                                                 console.log( x.split(/ |-/) )                          
+                                                                 x.split(/ |-/).forEach((y,j)=>{ 
+                                                                    let k = j 
+                                                                    let testingString= ''
+                                                                    while(k != x.split(/ |-/).length){
+                                                                        if( k == x.split(/ |-/).length -1){
+                                                                            testingString += x.split(/ |-/)[k] 
+                                                                        }
+                                                                        else{
+                                                                            testingString += x.split(/ |-/)[k] + " "
+                                                                        }                                                                        
+                                                                        k += 1
+                                                                    } 
+                                                                    console.log(
+                                                                        testingString,
+                                                                        getTextWidth({
+                                                                            elementText:testingString,
+                                                                            font: '16px Times New Roman' // default font for a alinks
+                                                                        }),                                                                        
+                                                                        Math.ceil(
+                                                                            getTextWidth({
+                                                                                elementText:testingString,
+                                                                                font: '16px Times New Roman' // default font for a alinks
+                                                                            })/heightDiff 
+                                                                        )                                                                        
+                                                                    )  
+                                                                    if(
+                                                                        Math.ceil(
+                                                                            getTextWidth({
+                                                                                elementText:testingString,
+                                                                                font: '16px Times New Roman' // default font for a alinks
+                                                                            })/heightDiff 
+                                                                        ) > 1                                                                            
+                                                                    ){
+                                                                        multiFinal += 1
+                                                                    }                                                                    
+                                                                 })
+                                                                 return multiFinal
+                                                             })() : 1
                                                             console.log(
                                                                 (
                                                                     16 * extender
