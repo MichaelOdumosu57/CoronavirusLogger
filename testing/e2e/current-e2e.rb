@@ -155,7 +155,7 @@ module TestMod
     # need hosts[:tests] so you dont make the ryberService and the componentObject.ts avail in production 
     RSpec.feature %{city dropdown} do
           
-      scenario %{ and if a city text size is in the input it will expand the input element } do
+      scenario %{ and if a city text size is option selected it will expand the input} do
         visit %{/}
         elem = first %{.p_a_n_e_l_ButtonText} 
         elem.select_option
@@ -172,7 +172,10 @@ module TestMod
         sleep 3
         input = Hash.new 
         input[:element] = all %{.p_a_n_e_l_Input}
-        input[:element].at(1).send_keys %{BETHEL HEIGHTS}
+        input[:element].at(1).send_keys %{BE}
+        sleep 2 
+        city_options = all %{.p_a_n_e_l_CityOption}
+        city_options.at(5).select_option
         sleep 2
         input[:width] = input[:element].at(1).style %{width}
         input[:font_family]  = input[:element].at(1).style %{font-family}
@@ -193,7 +196,7 @@ module TestMod
         }
         p input[:text_width][:canvas]   
         expect( helper_mod.number_parse(input[:width][%{width}])  ).to be > input[:text_width][:canvas].to_i 
-      end
+      end  
 
 
     end

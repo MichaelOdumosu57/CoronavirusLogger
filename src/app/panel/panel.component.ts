@@ -249,7 +249,6 @@ export class PanelComponent implements OnInit {
                                         " " +
                                         window.getComputedStyle(zChild['&#8387'].element)['font-family']
                                     })             
-
                                     zChild['&#8387'].css['width'] =   resize({
                                         default:zChild['&#8387'].extras['fontWidth'] + 50 ,
                                         containActual:numberParse(window.getComputedStyle(zChild['&#8353'].element).width),
@@ -268,12 +267,17 @@ export class PanelComponent implements OnInit {
                                     ).toString() + "px"         
                                                            
                                     this.ref.detectChanges()
-                                    // console.log(total)      
+                                    // console.log(total)   
+                                    let heightVal = 0  
+                                    let paddingy = 12 
+                                    let paddingx = 16
+                                    let heightDiff = numberParse(window.getComputedStyle(zChild['&#8387'].element).width) - 
+                                    (paddingx *2) -.25                                    
 
 
                                     if(total.length!== 0){
 
-
+                                        
                                         total.forEach((x,i)=>{
                                             let sym = "&#"+symOpt.next().value
                                             this.ryber[this.panelTV].quantity[1][5].quantity[1].push(2)
@@ -294,17 +298,54 @@ export class PanelComponent implements OnInit {
                                                 }
                                             })
                                             this.ryber[this.panelTV].quantity[1][5].metadata.router[1].push({link:null})
-                                            this.ryber[this.panelTV].quantity[1][5].ngCss[1].push({
-                                                padding:'12px 16px',
+                                            console.log(x,getTextWidth({
+                                                elementText:x,
+                                                font: '16px Times New Roman' // default font for a alinks
+                                            }),heightDiff)
+                                            let cssItem = {
+                                                padding:  paddingy.toString() + 'px '  + paddingx.toString() + 'px',
                                                 'background-color' :'rgb(255,255,255)',
                                                 width:window.getComputedStyle(zChild['&#8387'].element).width,
                                                 top:(
                                                     numberParse(window.getComputedStyle(zChild['&#8387'].element).top) +
                                                     numberParse(window.getComputedStyle(zChild['&#8387'].element).height) +
                                                     (
-                                                        i * 
-                                                        40
-                                                    )  
+                                                        (()=>{
+                                                            let finalVal = heightVal 
+                                                            let  extender = x.split(/ |-/).length != 1  ?
+                                                             Math.ceil(
+                                                                getTextWidth({
+                                                                    elementText:x,
+                                                                    font: '16px Times New Roman' // default font for a alinks
+                                                                })/heightDiff 
+                                                            ) : 1
+                                                            console.log(
+                                                                (
+                                                                    16 * extender
+                                                                ) + (paddingy *2)                                                                
+                                                            )
+                                                            heightVal += (
+                                                                (
+                                                                    16 * extender
+                                                                ) + (paddingy *2)
+                                                            ) 
+                                                            return finalVal
+                                                        })()
+
+                                                    )   
+                                                    // (heightDiff < getTextWidth({
+                                                    //     elementText:total[i-1],
+                                                    //     font: '16px Times New Roman' // default font for a alinks
+                                                    // }) ? (()=>{
+                                                    //     severalMulti += 1
+                                                    //     return 40 * (severalMulti)
+                                                    //     })() 
+                                                    //     : 
+                                                    //     (()=>{
+                                                    //         severalMulti = 0 
+                                                    //         return 0
+                                                    //     })()  
+                                                    // )
                                                 ).toString()+'px',
                                                 left:(
                                                     numberParse(window.getComputedStyle(zChild['&#8387'].element).left) 
@@ -320,16 +361,23 @@ export class PanelComponent implements OnInit {
                                                 : null,
                                                 border : '1px solid rgb(206, 212, 218)',
                                                 'text-decoration':'none',
-                                                'text-align':'center'                           
-                                            })
-                                            this.ryber[this.panelTV].quantity[1][5].ngCssDefault[1].push({})
+                                                'text-align':'center',                     
+                                            }
+                                            this.ryber[this.panelTV].quantity[1][5].ngCss[1].push(cssItem)
+                                            this.ryber[this.panelTV].quantity[1][5].ngCssDefault[1].push(
+                                                JSON.parse(
+                                                    JSON.stringify(
+                                                        cssItem
+                                                    )
+                                                )
+                                            )
                                             this.ref.detectChanges()
                                         })
                                         zChild = this.zChildInit({
                                             classes: ['p_a_n_e_l_Board', 'p_a_n_e_l_Title', 'p_a_n_e_l_ArticleTitle']
                                         }) 
                                         this.ref.detectChanges()
-                                        // console.log(zChild)
+                                        console.log(zChild)
                                         //--> state dropdown console log 
 
 
@@ -337,6 +385,10 @@ export class PanelComponent implements OnInit {
 
 
                                 })  
+                                eventDispatcher({
+                                    event:'input',
+                                    element:zChild['&#8387'].element
+                                })                                
                                 //                              
                                 
                                 
@@ -375,7 +427,7 @@ export class PanelComponent implements OnInit {
                         Object.values({...neededProps,...neededMetadata}).forEach((x,i)=>{
                             x[1].splice(x[1].length-total.length,x[1].length)
                         })
-                        console.log(this.ryber[this.panelTV].quantity[1][4])  
+                        // console.log(this.ryber[this.panelTV].quantity[1][4])  
                         total = []                        
                         for(let bbb of this.ryber.panelList){   
                             if(   bbb[0][0].match(zChild['&#8384'].element.value.toUpperCase()) !== null  ){
@@ -407,7 +459,7 @@ export class PanelComponent implements OnInit {
                                     }
                                 })
                                 this.ryber[this.panelTV].quantity[1][4].metadata.router[1].push({link:null})
-                                this.ryber[this.panelTV].quantity[1][4].ngCss[1].push({
+                                let cssItem = {
                                     padding:'12px 16px',
                                     'background-color' :'rgb(255,255,255)',
                                     width:window.getComputedStyle(zChild['&#8384'].element).width,
@@ -434,8 +486,15 @@ export class PanelComponent implements OnInit {
                                     border : '1px solid rgb(206, 212, 218)',
                                     'text-decoration':'none',
                                     'text-align':'center'                           
-                                })
-                                this.ryber[this.panelTV].quantity[1][4].ngCssDefault[1].push({})
+                                }
+                                this.ryber[this.panelTV].quantity[1][4].ngCss[1].push(cssItem)
+                                this.ryber[this.panelTV].quantity[1][4].ngCssDefault[1].push(
+                                    JSON.parse(
+                                        JSON.stringify(
+                                            cssItem
+                                        )
+                                    )
+                                )
                                 this.ref.detectChanges()
                             })
                             zChild = this.zChildInit({
@@ -452,23 +511,23 @@ export class PanelComponent implements OnInit {
                         let last = total.length !== 0 ? "&#"+(symOpt.next().value-1) :"&#8378"
                         zChild["&#8353"].extras.height = numberParse(window.getComputedStyle(zChild[last].element).top   ) +
                         numberParse(window.getComputedStyle(zChild[last].element).height) 
-                        // console.log(zChild)
+                        console.log(zChild)
                         zChild["&#8353"].css['height'] = (
                             zChild["&#8353"].extras.height > 525 ?
                             zChild["&#8353"].extras.height : 
                             525
                         ).toString() + 'px'    
                         this.ref.detectChanges()
-                    })  
+                    })   
                     eventDispatcher({
                         event:'input',
                         element:zChild['&#8384'].element
                     })
-                    // zChild['&#8384'].element.value = 'AK' 
-                    // eventDispatcher({
-                    //     event:'click',
-                    //     element:zChild['&#8392'].element
-                    // })                              
+                    zChild['&#8384'].element.value = 'CA'
+                    eventDispatcher({
+                        event:'click',
+                        element:zChild['&#8392'].element
+                    })                              
                     //                                  
                     this.ryber.panelClickEventSubscription1.unsubscribe()             
                 })
@@ -477,15 +536,15 @@ export class PanelComponent implements OnInit {
                 zChild['&#8378'].css['opacity'] = 1
                 this.ref.detectChanges()
                 this.ryber.panelClickEventSubscription0.unsubscribe()      
-                // eventDispatcher({
-                //     event:'click',
-                //     element:zChild['&#8392'].element
-                // })                           
+                eventDispatcher({
+                    event:'click',
+                    element:zChild['&#8392'].element
+                })                           
             })
-            // eventDispatcher({
-            //     event:'click',
-            //     element:zChild['&#8380'].element
-            // })              
+            eventDispatcher({
+                event:'click',
+                element:zChild['&#8380'].element
+            })              
             //
             
             

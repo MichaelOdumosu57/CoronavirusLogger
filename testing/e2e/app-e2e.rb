@@ -93,7 +93,6 @@ module TestMod
     
   end  
   
-  
   Capybara.register_driver :edgeBrowser do |app|
     
     # p Capybara::Selenium::Driver::InternetExplorerDriver.options
@@ -131,14 +130,14 @@ module TestMod
 
   RSpec.configure do |config|
     # my_drivers = %i{   selenium internetExplorer edgeBrowser  selenium_chrome    }
-    my_drivers = %i{   selenium internetExplorer edgeBrowser      }
+    # my_drivers = %i{   selenium internetExplorer edgeBrowser      }
     # my_drivers = %i{  edgeBrowser selenium }
-    # my_drivers = %i{  selenium_edge  }
+    # my_drivers = %i{  internetExplorer  }
     # my_drivers = %i{ opera }
-    # my_drivers = %i{ selenium }
+    my_drivers = %i{ selenium }
     hosts = Hash.new 
-    # hosts[:prod] =  %{https://watermine.firebaseapp.com}
-    hosts[:dev] =  %{http://localhost:4200}
+    hosts[:prod] =  %{https://watermine.firebaseapp.com}
+    # hosts[:dev] =  %{http://localhost:4200}
     config.around do |example|
       p example 
       my_drivers.each do |browser|
@@ -544,7 +543,35 @@ module TestMod
         }
         p input[:text_width][:canvas]   
         expect( helper_mod.number_parse(input[:width][%{width}])  ).to be > input[:text_width][:canvas].to_i 
-      end         
+      end     
+      scenario %{ if the city input is cleared, the size of the input shrinks back to 150 } do
+        visit %{/}
+        elem = first %{.p_a_n_e_l_ButtonText} 
+        elem.select_option
+        options = all %{.p_a_n_e_l_Option}        
+        button = first %{.p_a_n_e_l_NextButton} 
+        button.select_option   
+        sleep 5         
+        Capybara.ignore_hidden_elements = false 
+        input = first %{.p_a_n_e_l_Input}
+        sleep 5  
+        input.send_keys %{AR}
+        stateOpt = all %{.p_a_n_e_l_StateOption}  
+        button.select_option
+        sleep 3
+        input = Hash.new 
+        input[:element] = all %{.p_a_n_e_l_Input}
+        input[:element].at(1).send_keys %{BETHEL HEIGHTS}
+        sleep 2
+        input[:old_width] = input[:element].at(1).style %{width} 
+        14.times do 
+          input[:element].at(1).send_keys :backspace 
+        end 
+        sleep 5
+        input[:new_width] = input[:element].at(1).style %{width}
+        p input[:new_width]
+        expect( helper_mod.number_parse(input[:new_width][%{width}])  ).to be < 160
+      end          
 
     end       
     
