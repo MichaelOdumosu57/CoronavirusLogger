@@ -137,7 +137,7 @@ module TestMod
     my_drivers = %i{ selenium }
     hosts = Hash.new 
     # hosts[:prod] =  %{https://watermine.firebaseapp.com}
-    hosts[:dev] =  %{http://localhost:4201} # run as live reload false
+    hosts[:dev] =  %{http://localhost:4200} 
     config.around do |example|
       p example 
       my_drivers.each do |browser|

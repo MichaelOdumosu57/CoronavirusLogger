@@ -273,6 +273,7 @@ export class PanelComponent implements OnInit {
                                     let paddingx = 16
                                     let heightDiff = numberParse(window.getComputedStyle(zChild['&#8387'].element).width) - 
                                     (paddingx *2) -1.40            
+                                    // the textWidth is calculated differently in edge unfortunately
 
 
                                     if(total.length!== 0){
@@ -345,8 +346,11 @@ export class PanelComponent implements OnInit {
                                                     )
                                                 )
                                             )
-                                            this.ref.detectChanges()
+                                            // this.ref.detectChanges() 
+                                            // try to get it done without using the element 
+
                                         })
+                                        this.ref.detectChanges()
                                         zChild = this.zChildInit({
                                             classes: ['p_a_n_e_l_Board', 'p_a_n_e_l_Title', 'p_a_n_e_l_ArticleTitle']
                                         }) 
@@ -362,12 +366,11 @@ export class PanelComponent implements OnInit {
                                 eventDispatcher({
                                     event:'input',
                                     element:zChild['&#8387'].element
-                                })                                
-                                //                              
+                                })                                                              
                                 
                                 
                             }
-                            //
+                            
 
                         }    
                         
@@ -442,7 +445,7 @@ export class PanelComponent implements OnInit {
                                         numberParse(window.getComputedStyle(zChild['&#8384'].element).height) +
                                         (
                                             i * 
-                                            40
+                                            40 // font size of element plus top and bottom padding
                                         )  
                                     ).toString()+'px',
                                     left:(
@@ -469,8 +472,9 @@ export class PanelComponent implements OnInit {
                                         )
                                     )
                                 )
-                                this.ref.detectChanges()
+                                // this.ref.detectChanges()
                             })
+                            this.ref.detectChanges()
                             zChild = this.zChildInit({
                                 classes: ['p_a_n_e_l_Board', 'p_a_n_e_l_Title', 'p_a_n_e_l_ArticleTitle']
                             }) 
@@ -497,11 +501,11 @@ export class PanelComponent implements OnInit {
                         event:'input',
                         element:zChild['&#8384'].element
                     })
-                    zChild['&#8384'].element.value = 'CA'
-                    eventDispatcher({
-                        event:'click',
-                        element:zChild['&#8392'].element
-                    })                              
+                    // zChild['&#8384'].element.value = 'CA'
+                    // eventDispatcher({
+                    //     event:'click',
+                    //     element:zChild['&#8392'].element
+                    // })                              
                     //                                  
                     this.ryber.panelClickEventSubscription1.unsubscribe()             
                 })
@@ -510,15 +514,15 @@ export class PanelComponent implements OnInit {
                 zChild['&#8378'].css['opacity'] = 1
                 this.ref.detectChanges()
                 this.ryber.panelClickEventSubscription0.unsubscribe()      
-                eventDispatcher({
-                    event:'click',
-                    element:zChild['&#8392'].element
-                })                           
+                // eventDispatcher({
+                //     event:'click',
+                //     element:zChild['&#8392'].element
+                // })                           
             })
-            eventDispatcher({
-                event:'click',
-                element:zChild['&#8380'].element
-            })              
+            // eventDispatcher({
+            //     event:'click',
+            //     element:zChild['&#8380'].element
+            // })              
             //
             
             

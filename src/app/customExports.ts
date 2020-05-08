@@ -325,6 +325,22 @@ export function dropdown(   devObj:{
                     testingString = testingString.slice(0,-1)
 
 
+                    console.log(
+                        testingString,
+                        getTextWidth({
+                            elementText:testingString,
+                            font: devObj.font.join(" ") 
+                        }),
+                        devObj.heightDiff,
+                        Math.ceil(
+                            getTextWidth({
+                                elementText:testingString,
+                                font: devObj.font.join(" ") 
+                            })/devObj.heightDiff 
+                        )                                                
+                    )
+
+
                     if(
                         Math.ceil(
                             getTextWidth({
