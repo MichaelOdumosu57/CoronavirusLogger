@@ -2,7 +2,7 @@ import {   Component, OnInit,Input,ViewChildren,AfterViewInit,Inject, OnDestroy,
 import {   RyberService   } from '../ryber.service';
 import {   fromEvent,interval, of,from, Observable,merge, Subject, combineLatest } from 'rxjs';
 import {   catchError,take,timeout,mapTo, debounceTime,distinctUntilChanged, debounce    } from 'rxjs/operators';
-import {   zChildren,getTextWidth,numberParse,xPosition,resize,componentBootstrap,eventDispatcher,dropdown   } from '../customExports'
+import {   zChildren,getTextWidth,numberParse,xPosition,resize,componentBootstrap,eventDispatcher   } from '../customExports'
 
 
 @Component({
@@ -269,7 +269,7 @@ export class PanelComponent implements OnInit {
                                     this.ref.detectChanges()
                                     // console.log(total)   
                                     let heightVal = 0  
-                                    let paddingy = [12] 
+                                    let paddingy = 12 
                                     let paddingx = 16
                                     let heightDiff = numberParse(window.getComputedStyle(zChild['&#8387'].element).width) - 
                                     (paddingx *2) -1.40            
@@ -298,7 +298,10 @@ export class PanelComponent implements OnInit {
                                                 }
                                             })
                                             this.ryber[this.panelTV].quantity[1][5].metadata.router[1].push({link:null})
-                                            
+                                            console.log(x,getTextWidth({
+                                                elementText:x,
+                                                font: '16px Times New Roman' // default font for a alinks
+                                            }),heightDiff)
                                             let cssItem = {
                                                 padding:  paddingy.toString() + 'px '  + paddingx.toString() + 'px',
                                                 'background-color' :'rgb(255,255,255)',
@@ -308,17 +311,94 @@ export class PanelComponent implements OnInit {
                                                     numberParse(window.getComputedStyle(zChild['&#8387'].element).height) +
                                                     (
                                                         (()=>{
-                                                            let ans = dropdown({
-                                                                font :['16px','Times New Roman'],
-                                                                heightVal,
-                                                                heightDiff,
-                                                                paddingy,
-                                                                stringAssembly: x.split(/ |-/),
-                                                                fn:'irregularWords'
-                                                            })  
-                                                            heightVal = ans[1] 
-                                                            return ans[0]                                                   
+                                                            let finalVal = heightVal 
+                                                            let stringAssembly = x.split(/ |-/)
+                                                            let  extender = stringAssembly.length != 1  ?
+                                                             (()=>{
+                                                                let multiFinal = 1
+                                                                console.log( stringAssembly ) 
+                                                                let controlK = 0                       
+                                                                stringAssembly.forEach((y,j)=>{ 
+                                                                    
+
+                                                                    if(j === controlK || controlK == 0 ){ 
+
+                                                                        let k = j 
+                                                                        let testingString= ''
+                                                                        while(k != x.split(/ |-/).length){
+                                                                            testingString += x.split(/ |-/)[k] + " "                                                                       
+                                                                            
+
+                                                                            if(
+                                                                                Math.ceil(
+                                                                                    getTextWidth({
+                                                                                        elementText:testingString.slice(0,-1),
+                                                                                        font: '16px Times New Roman'
+                                                                                    })/heightDiff 
+                                                                                )  >  1 
+                                                                            ){
+                                                                                console.log('get j == to',k)
+                                                                                controlK = k 
+                                                                                break 
+                                                                            }
+                                                                            
+                                                                            
+                                                                            k += 1                                                                       
+                                                                            console.log(
+                                                                                testingString,
+                                                                                getTextWidth({
+                                                                                    elementText:testingString.slice(0,-1),
+                                                                                    font: '16px Times New Roman' // default font for a alinks
+                                                                                }),
+                                                                                Math.ceil(
+                                                                                    getTextWidth({
+                                                                                        elementText:testingString.slice(0,-1),
+                                                                                        font: '16px Times New Roman' // default font for a alinks
+                                                                                    })/heightDiff 
+                                                                                )                                                                            
+                                                                            )                                                                        
+                                                                        } 
+                                                                        testingString = testingString.slice(0,-1)
+                                                                        console.log(
+                                                                            testingString,
+                                                                            getTextWidth({
+                                                                                elementText:testingString,
+                                                                                font: '16px Times New Roman' // default font for a alinks
+                                                                            }),                                                                        
+                                                                            Math.ceil(
+                                                                                getTextWidth({
+                                                                                    elementText:testingString,
+                                                                                    font: '16px Times New Roman' // default font for a alinks
+                                                                                })/heightDiff 
+                                                                            )                                                                        
+                                                                        )  
+                                                                        if(
+                                                                            Math.ceil(
+                                                                                getTextWidth({
+                                                                                    elementText:testingString,
+                                                                                    font: '16px Times New Roman' // default font for a alinks
+                                                                                })/heightDiff 
+                                                                            ) > 1                                                                            
+                                                                        ){
+                                                                            multiFinal += 1
+                                                                        }  
+                                                                    }                                                                  
+                                                                 })
+                                                                 return multiFinal
+                                                             })() : 1
+                                                            console.log(
+                                                                (
+                                                                    16 * extender
+                                                                ) + (paddingy *2)                                                                
+                                                            )
+                                                            heightVal += (
+                                                                (
+                                                                    16 * extender
+                                                                ) + (paddingy *2)
+                                                            ) 
+                                                            return finalVal
                                                         })()
+
                                                     )   
                                                 ).toString()+'px',
                                                 left:(
